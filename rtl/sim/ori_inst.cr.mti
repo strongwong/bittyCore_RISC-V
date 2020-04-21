@@ -1,0 +1,95 @@
+E:/work/GitHub/bittyCore_RISC-V/rtl/core/inst_rom.v {1 {vlog -work work -stats=none E:/work/GitHub/bittyCore_RISC-V/rtl/core/inst_rom.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module inst_rom
+
+Top level modules:
+	inst_rom
+
+} {} {}} E:/work/GitHub/bittyCore_RISC-V/rtl/core/bitty_riscv_sopc.v {1 {vlog -work work -stats=none E:/work/GitHub/bittyCore_RISC-V/rtl/core/bitty_riscv_sopc.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module bitty_riscv_sopc
+
+Top level modules:
+	bitty_riscv_sopc
+
+} {} {}} E:/work/GitHub/bittyCore_RISC-V/rtl/core/mem_wb.v {1 {vlog -work work -stats=none E:/work/GitHub/bittyCore_RISC-V/rtl/core/mem_wb.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module mem_wb
+
+Top level modules:
+	mem_wb
+
+} {} {}} E:/work/GitHub/bittyCore_RISC-V/rtl/core/pc_reg.v {1 {vlog -work work -stats=none E:/work/GitHub/bittyCore_RISC-V/rtl/core/pc_reg.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module pc_reg
+
+Top level modules:
+	pc_reg
+
+} {} {}} E:/work/GitHub/bittyCore_RISC-V/rtl/core/id_ex.v {1 {vlog -work work -stats=none E:/work/GitHub/bittyCore_RISC-V/rtl/core/id_ex.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module id_ex
+
+Top level modules:
+	id_ex
+
+} {} {}} E:/work/GitHub/bittyCore_RISC-V/rtl/core/bitty_riscv.v {1 {vlog -work work -stats=none E:/work/GitHub/bittyCore_RISC-V/rtl/core/bitty_riscv.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module bitty_riscv
+
+Top level modules:
+	bitty_riscv
+
+} {} {}} E:/work/GitHub/bittyCore_RISC-V/rtl/sim/bitty_riscv_sopc_tb.v {1 {vlog -work work -stats=none E:/work/GitHub/bittyCore_RISC-V/rtl/sim/bitty_riscv_sopc_tb.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module bitty_riscv_sopc_tb
+
+Top level modules:
+	bitty_riscv_sopc_tb
+
+} {} {}} E:/work/GitHub/bittyCore_RISC-V/rtl/core/ex_mem.v {1 {vlog -work work -stats=none E:/work/GitHub/bittyCore_RISC-V/rtl/core/ex_mem.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module ex_mem
+
+Top level modules:
+	ex_mem
+
+} {} {}} E:/work/GitHub/bittyCore_RISC-V/rtl/core/if_id.v {1 {vlog -work work -stats=none E:/work/GitHub/bittyCore_RISC-V/rtl/core/if_id.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module if_id
+
+Top level modules:
+	if_id
+
+} {} {}} E:/work/GitHub/bittyCore_RISC-V/rtl/core/id.v {1 {vlog -work work -stats=none E:/work/GitHub/bittyCore_RISC-V/rtl/core/id.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module id
+
+Top level modules:
+	id
+
+} {} {}} E:/work/GitHub/bittyCore_RISC-V/rtl/core/bitty_defs.v {1 {vlog -work work -stats=none E:/work/GitHub/bittyCore_RISC-V/rtl/core/bitty_defs.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+
+} {} {}} E:/work/GitHub/bittyCore_RISC-V/rtl/core/ex.v {1 {vlog -work work -stats=none E:/work/GitHub/bittyCore_RISC-V/rtl/core/ex.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module ex
+
+Top level modules:
+	ex
+
+} {} {}} E:/work/GitHub/bittyCore_RISC-V/rtl/core/mem.v {1 {vlog -work work -stats=none E:/work/GitHub/bittyCore_RISC-V/rtl/core/mem.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module mem
+
+Top level modules:
+	mem
+
+} {} {}} E:/work/GitHub/bittyCore_RISC-V/rtl/core/regsfile.v {1 {vlog -work work -stats=none E:/work/GitHub/bittyCore_RISC-V/rtl/core/regsfile.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module regsfile
+
+Top level modules:
+	regsfile
+
+} {} {}}

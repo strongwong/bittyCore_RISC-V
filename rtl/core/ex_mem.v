@@ -25,29 +25,31 @@ SOFTWARE.
 
 `include "bitty_defs.v"
 
-module inst_fetch(
-    input       wire            clk,
-    input       wire            rst,
+module ex_mem(
+    input   wire        clk,
+    input   wire        rst,
 
-    output      wire[31:0]      inst_o
+    // 来自执行阶段的信息
+    input   wire[`RegAddrBus]       ex_wd,
+    input   wire                    ex_wreg,
+    input   wire[`RegBus]           ex_wdata,
+
+    // 送到访存阶段的信息
+    output  reg[`RegAddrBus]        mem_wd,
+    output  reg                     mem_wreg,
+    output  reg[`RegBus]            mem_wdata
 );
 
-    wire[`InstAddrBus]          pc;
-    wire                        rom_ce;
-
-    // pc 模块例化
-    pc_reg  u_pc_reg(
-        .clk(clk),
-        .rst(rst),
-        .pc(pc),
-        .ce(rom_ce)
-    );
-
-    // 指令存储器 rom 例化
-    rom     u_rom(
-        .ce(rom_ce),
-        .addr(pc),
-        .inst(inst_o)
-    );
-
-endmodule // inst_fetch
+    always  @ (posedge clk) begin
+        if (rst == `RstEnable) begin
+            mem_wd      <= `NOPRegAddr;
+            mem_wreg    <= `WriteDisable;
+            mem_wdata   <= `ZeroWord;
+        end else begin
+            mem_wd      <= ex_wd;
+            mem_wreg    <= ex_wreg;
+            mem_wdata   <= ex_wdata;
+        end
+    end
+    
+endmodule // ex_mem

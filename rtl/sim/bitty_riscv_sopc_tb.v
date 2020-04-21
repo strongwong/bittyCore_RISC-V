@@ -23,30 +23,31 @@ SOFTWARE.
 
 ******************************************************************************/
 
-`include "bitty_defs.v"
+`timescale  1ns/1ps
 
-module pc_reg(
-    input       wire                clk,
-    input       wire                rst,
+module  bitty_riscv_sopc_tb();
 
-    output      reg[`InstAddrBus]   pc,
-    output      reg                 ce 
-);
+    reg     CLOCK_50;
+    reg     rst;
+    
+    // 每隔 10ns CLOCK_50 信号翻转一次，所以周期是 20ns, 对应 50MHz
+    initial begin
+        CLOCK_50    = 1'b0;
+        forever #10 CLOCK_50    = ~CLOCK_50;
+    end 
 
-    always  @ (posedge clk) begin
-        if (rst == `RstEnable) begin
-            ce  <= `ReadDisable;                // 复位时，读指令使能无效
-        end else begin
-            ce  <= `ReadEnable;
-        end
+    // 最初时刻，复位信号有效，在第 195ns，复位信号无效，最小 SOPC 开始运行
+    // 运行 1000ns 后，暂停仿真
+    initial begin
+        rst = 1'b0;
+        #195    rst = 1'b1;
+        #1000   $stop;
     end
 
-    always  @ (posedge clk) begin
-        if (ce == `ReadDisable) begin
-            pc  <=  `ZeroWord;
-        end else begin
-            pc  <= pc + 4'h4;
-        end
-    end
+    // 例化最小 sopc
+    bitty_riscv_sopc   u_bitty_riscv_sopc(
+        .clk(CLOCK_50),
+        .rst(rst)
+    );
 
-endmodule // pc_reg
+endmodule // bitty_riscv_sopc_tb

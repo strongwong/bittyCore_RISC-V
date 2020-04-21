@@ -25,28 +25,30 @@ SOFTWARE.
 
 `include "bitty_defs.v"
 
-module pc_reg(
-    input       wire                clk,
-    input       wire                rst,
+module mem(
+    input   wire            rst,
 
-    output      reg[`InstAddrBus]   pc,
-    output      reg                 ce 
+    // 来自执行阶段的信息
+    input   wire[`RegAddrBus]   wd_i,
+    input   wire                wreg_i,
+    input   wire[`RegBus]       wdata_i,
+
+    // 访存阶段的结果
+    output  reg[`RegAddrBus]    wd_o,
+    output  reg                 wreg_o,
+    output  reg[`RegBus]        wdata_o
 );
 
-    always  @ (posedge clk) begin
+    always  @ (*)   begin
         if (rst == `RstEnable) begin
-            ce  <= `ReadDisable;                // 复位时，读指令使能无效
+            wd_o    <= `NOPRegAddr;
+            wreg_o  <= `WriteDisable;
+            wdata_o <= `ZeroWord;
         end else begin
-            ce  <= `ReadEnable;
+            wd_o    <= wd_i;
+            wreg_o  <= wreg_i;
+            wdata_o <= wdata_i;
         end
     end
 
-    always  @ (posedge clk) begin
-        if (ce == `ReadDisable) begin
-            pc  <=  `ZeroWord;
-        end else begin
-            pc  <= pc + 4'h4;
-        end
-    end
-
-endmodule // pc_reg
+endmodule // mem

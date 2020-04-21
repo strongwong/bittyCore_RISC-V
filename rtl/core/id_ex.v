@@ -25,28 +25,43 @@ SOFTWARE.
 
 `include "bitty_defs.v"
 
-module pc_reg(
-    input       wire                clk,
-    input       wire                rst,
+module id_ex(
+    input   wire        clk,
+    input   wire        rst,
 
-    output      reg[`InstAddrBus]   pc,
-    output      reg                 ce 
+    // 从译码段传递过来的信息
+    input   wire[`AluOpBus]     id_aluop,
+    input   wire[`AluSelBus]    id_alusel,
+    input   wire[`RegBus]       id_reg1,
+    input   wire[`RegBus]       id_reg2,
+    input   wire[`RegAddrBus]   id_wd,
+    input   wire                id_wreg,
+
+    // 传递到执行段的信息
+    output  reg[`AluOpBus]      ex_aluop,
+    output  reg[`AluSelBus]     ex_alusel,
+    output  reg[`RegBus]        ex_reg1,
+    output  reg[`RegBus]        ex_reg2,
+    output  reg[`RegAddrBus]    ex_wd,
+    output  reg                 ex_wreg
 );
 
-    always  @ (posedge clk) begin
+    always @ (posedge clk)  begin
         if (rst == `RstEnable) begin
-            ce  <= `ReadDisable;                // 复位时，读指令使能无效
+            ex_aluop    <= `EXE_NONE;
+            ex_alusel   <= `EXE_RES_NONE;
+            ex_reg1     <= `ZeroWord;
+            ex_reg2     <= `ZeroWord;
+            ex_wd       <= `NOPRegAddr;
+            ex_wreg     <= `WriteDisable;
         end else begin
-            ce  <= `ReadEnable;
+            ex_aluop    <= id_aluop;
+            ex_alusel   <= id_alusel;
+            ex_reg1     <= id_reg1;
+            ex_reg2     <= id_reg2;
+            ex_wd       <= id_wd;
+            ex_wreg     <= id_wreg;
         end
     end
 
-    always  @ (posedge clk) begin
-        if (ce == `ReadDisable) begin
-            pc  <=  `ZeroWord;
-        end else begin
-            pc  <= pc + 4'h4;
-        end
-    end
-
-endmodule // pc_reg
+endmodule // id_ex

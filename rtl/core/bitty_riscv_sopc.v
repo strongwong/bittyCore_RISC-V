@@ -25,23 +25,30 @@ SOFTWARE.
 
 `include "bitty_defs.v"
 
-module rom(
-    input       wire                ce,
-    input       wire[`InstAddrBus]  addr,
-
-    output      reg[`InstBus]       inst
+module bitty_riscv_sopc(
+    input   wire        clk,
+    input   wire        rst
 );
 
-    reg[`InstBus]   rom[63:0];
+    // 连接指令存储器
+    wire[`InstAddrBus]  inst_addr;
+    wire[`InstBus]      inst;
+    wire                rom_ce;
 
-    initial $readmemh   ( "inst.data", rom);
+    // 例化处理器 openmips
+    bitty_riscv    u_bitty_riscv(
+        .clk(clk),
+        .rst(rst),
+        .rom_addr_o(inst_addr),
+        .rom_data_i(inst),
+        .rom_ce_o(rom_ce)
+    );
 
-    always  @ (*)   begin
-        if (ce  == 1'b0) begin
-            inst    <= 32'h0;
-        end else begin
-            inst    <= rom[addr];
-        end
-    end
+    // 例化指令存储器 ROM
+    inst_rom    u_inst_rom(
+        .ce(rom_ce),
+        .addr(inst_addr),
+        .inst(inst)
+    );
 
-endmodule // rom
+endmodule // bitty_riscv_sopc

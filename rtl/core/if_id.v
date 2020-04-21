@@ -23,27 +23,29 @@ SOFTWARE.
 
 ******************************************************************************/
 
-module  inst_fetch_tb;
+`include "bitty_defs.v"
 
-    reg             clock;
-    reg             rst;
-    wire[31:0]      inst;
+module if_id(
+    input   wire        clk,  
+    input   wire        rst,
 
-    initial begin
-        clock   = 1'b0;
-        forever #10 clock = ~clock;
+    // 来自取指阶段的信号
+    input   wire[`InstAddrBus]      if_pc,
+    input   wire[`InstBus]          if_inst,
+
+    // 对应译码阶段的信号
+    output  reg[`InstAddrBus]       id_pc,
+    output  reg[`InstBus]           id_inst
+);
+
+    always @ (posedge clk)  begin
+        if (rst == `RstEnable) begin
+            id_pc <= `ZeroWord;
+            id_inst <= `ZeroWord;
+        end else begin
+            id_pc <= if_pc;
+            id_inst <= if_inst;
+        end
     end
 
-    initial begin
-        rst = 1'b0;
-        #195    rst = 1'b1;
-        #1000   $stop;
-    end
-
-    inst_fetch  u_inst_fetch(
-        .clk(clock),
-        .rst(rst),
-        .inst_o(inst)
-    );
-
-endmodule // inst_fetch
+endmodule

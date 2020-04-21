@@ -31,18 +31,28 @@ SOFTWARE.
 `define WriteDisable            1'b0    
 `define ReadEnable              1'b1
 `define ReadDisable             1'b0
-`define AluOpBus                7:0             //译码阶段的输出 aluop_o 宽度
+`define AluOpBus                3:0             //译码阶段的输出 aluop_o 宽度
 `define AluSelBus               2:0             //译码阶段的输出 alusel_o 宽度
-`define InstValid               1'b0
-`define InstInvalid             1'b1
+`define InstValid               1'b1
+`define InstInvalid             1'b0
 `define True_v                  1'b1
 `define False_v                 1'b0
 `define ChipEnable              1'b1
 `define ChipDisable             1'b0
 
 //******    与具体指令相关的宏定义    ******//
-`define INST_ORI                7'b0010011       //指令 ori 的指令码
+`define INST_I_TYPE             7'b0010011       // I-type 指令
+`define INST_ORI                3'b110           // ori 指令
 
+
+//******    执行时对应的指令进行操作相关宏定义  *******//
+//AluOp
+`define EXE_NONE                4'b0000
+`define EXE_OR                  4'b1000
+
+//AluSel
+`define EXE_RES_LOGIC           3'b001
+`define EXE_RES_NONE            3'b000
 
 
 //******    与指令存储器 ROM 相关的宏定义    ******//

@@ -25,28 +25,25 @@ SOFTWARE.
 
 `include "bitty_defs.v"
 
-module pc_reg(
-    input       wire                clk,
-    input       wire                rst,
-
-    output      reg[`InstAddrBus]   pc,
-    output      reg                 ce 
+module inst_rom(
+    input   wire                ce,
+    input   wire[`InstAddrBus]  addr,
+    output  reg[`InstBus]       inst 
 );
 
-    always  @ (posedge clk) begin
-        if (rst == `RstEnable) begin
-            ce  <= `ReadDisable;                // 复位时，读指令使能无效
-        end else begin
-            ce  <= `ReadEnable;
-        end
-    end
+    // 定义一个数组，大小是 InstMemNum ,元素宽度是 InstBus
+    reg[`InstBus]   inst_mem[0:`InstMemNum-1];
 
-    always  @ (posedge clk) begin
+    // 使用文件 inst_rom.data 初始化指令存储器
+    initial $readmemh("inst_rom.data", inst_mem);
+
+    // 当复位信号无效时，依据输入的地址，给出指令存储器 ROM 中对应的元素
+    always  @ (*) begin
         if (ce == `ReadDisable) begin
-            pc  <=  `ZeroWord;
+            inst    <= `ZeroWord;
         end else begin
-            pc  <= pc + 4'h4;
+            inst    <= inst_mem[addr[`InstMemNumLog2+1:2]];
         end
     end
 
-endmodule // pc_reg
+endmodule // inst_rom

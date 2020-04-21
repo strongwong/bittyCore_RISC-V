@@ -1,0 +1,94 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+dD:/intelFPGA/18.1/modelsim_ase/win32aloem
+vinst_fetch
+Z0 !s110 1587468533
+!i10b 1
+!s100 C;P:VMIUF?ZZm6SHe:jR63
+IZL2PGgbflMO;OOI6_4D6T2
+Z1 VDg1SIo80bB@j0V0VzS_@n1
+Z2 dE:/work/GitHub/bittyCore_RISC-V/rtl/sim
+w1587467545
+8E:/work/GitHub/bittyCore_RISC-V/rtl/core/inst_fetch.v
+FE:/work/GitHub/bittyCore_RISC-V/rtl/core/inst_fetch.v
+Z3 L0 28
+Z4 OV;L;10.5b;63
+r1
+!s85 0
+31
+Z5 !s108 1587468533.000000
+!s107 E:\work\GitHub\bittyCore_RISC-V\rtl\core\bitty_defs.v|E:/work/GitHub/bittyCore_RISC-V/rtl/core/inst_fetch.v|
+!s90 -reportprogress|300|-work|work|-stats=none|E:/work/GitHub/bittyCore_RISC-V/rtl/core/inst_fetch.v|
+!i113 1
+Z6 o-work work
+Z7 tCvgOpt 0
+vinst_fetch_tb
+R0
+!i10b 1
+!s100 4?DEcKgD4Xe2n[BKV^64Q1
+IoYgFC@G@fjhdKNZNNj5]90
+R1
+R2
+w1587468529
+8E:/work/GitHub/bittyCore_RISC-V/rtl/sim/inst_fetch_tb.v
+FE:/work/GitHub/bittyCore_RISC-V/rtl/sim/inst_fetch_tb.v
+L0 26
+R4
+r1
+!s85 0
+31
+R5
+!s107 E:/work/GitHub/bittyCore_RISC-V/rtl/sim/inst_fetch_tb.v|
+!s90 -reportprogress|300|-work|work|-stats=none|E:/work/GitHub/bittyCore_RISC-V/rtl/sim/inst_fetch_tb.v|
+!i113 1
+R6
+R7
+vpc_reg
+R0
+!i10b 1
+!s100 N3jc074E`5O`a<@@i<Y`X2
+IL4NEd=H]A`6g5f_1H?4PL1
+R1
+R2
+w1587466705
+8E:/work/GitHub/bittyCore_RISC-V/rtl/core/pc_reg.v
+FE:/work/GitHub/bittyCore_RISC-V/rtl/core/pc_reg.v
+R3
+R4
+r1
+!s85 0
+31
+R5
+!s107 E:\work\GitHub\bittyCore_RISC-V\rtl\core\bitty_defs.v|E:/work/GitHub/bittyCore_RISC-V/rtl/core/pc_reg.v|
+!s90 -reportprogress|300|-work|work|-stats=none|E:/work/GitHub/bittyCore_RISC-V/rtl/core/pc_reg.v|
+!i113 1
+R6
+R7
+vrom
+R0
+!i10b 1
+!s100 GSWWS2JQ;Z7EVG`4EVCK93
+IGz1`z?i^ZDedGWc;;L]fH0
+R1
+R2
+w1587467724
+8E:/work/GitHub/bittyCore_RISC-V/rtl/core/rom.v
+FE:/work/GitHub/bittyCore_RISC-V/rtl/core/rom.v
+R3
+R4
+r1
+!s85 0
+31
+R5
+!s107 E:\work\GitHub\bittyCore_RISC-V\rtl\core\bitty_defs.v|E:/work/GitHub/bittyCore_RISC-V/rtl/core/rom.v|
+!s90 -reportprogress|300|-work|work|-stats=none|E:/work/GitHub/bittyCore_RISC-V/rtl/core/rom.v|
+!i113 1
+R6
+R7

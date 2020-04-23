@@ -34,6 +34,16 @@ module id(
     input   wire[`RegBus]           reg1_data_i,
     input   wire[`RegBus]           reg2_data_i,
 
+    // from ex
+    input   wire                    ex_wreg_i,
+    input   wire[`RegBus]           ex_wdata_i,
+    input   wire[`RegAddrBus]       ex_wd_i,
+
+    // from wd mem
+    input   wire                    mem_wreg_i,
+    input   wire[`RegBus]           mem_wdata_i,
+    input   wire[`RegAddrBus]       mem_wd_i,
+
     // output to regfile
     output  reg                     reg1_read_o,
     output  reg                     reg2_read_o,
@@ -117,26 +127,44 @@ module id(
         end     // if
     end // always
 
+
+    // 给 reg1_o 赋值的过程增加了两种情况：
+    // 1. 如果 Regfile 模块读端口 1 要读取的寄存器就是执行阶段要写的目的寄存器，那么直接把执行阶段的结果 ex_wdata_i 作为 reg1_o 的值
+    // 2. 如果 Regfile 模块读端口 1 要读取的寄存器就是访存阶段要写的目的寄存器，那么直接把访存阶段的结果 mem_wdata_i 作为 reg1_o 的值
+
     // 确定运算的源操作数 1
     always @ (*) begin
         if (rst == `RstEnable) begin
             reg1_o  <= `ZeroWord;
-        end else if (reg1_read_o == `ReadEnable) begin
+        end else if ((reg1_read_o == 1'b1) && (ex_wreg_i == 1'b1) && (ex_wd_i == reg1_addr_o)) begin
+            reg1_o  <= ex_wdata_i;
+        end else if ((reg1_read_o == 1'b1) && (mem_wreg_i == 1'b1) && (mem_wd_i == reg1_addr_o)) begin
+            reg1_o  <= mem_wdata_i;
+        end else if (reg1_read_o == 1'b1) begin
             reg1_o  <= reg1_data_i;         // regfile port 1 output data
-        end else if (reg1_read_o == `ReadDisable) begin
+        end else if (reg1_read_o == 1'b0) begin
             reg1_o  <= imm;                 // 立即数
         end else begin
             reg1_o  <= `ZeroWord;
         end
+        
     end
+
+    // 给 reg2_o 赋值的过程增加了两种情况：
+    // 1. 如果 Regfile 模块读端口 2 要读取的寄存器就是执行阶段要写的目的寄存器，那么直接把执行阶段的结果 ex_wdata_i 作为 reg2_o 的值
+    // 2. 如果 Regfile 模块读端口 2 要读取的寄存器就是访存阶段要写的目的寄存器，那么直接把访存阶段的结果 mem_wdata_i 作为 reg2_o 的值
 
     // 确定运算的源操作数 2
     always @ (*) begin
         if (rst == `RstEnable) begin
             reg2_o  <= `ZeroWord;
-        end else if (reg2_read_o == `ReadEnable) begin
+        end else if ((reg2_read_o == 1'b1) && (ex_wreg_i == 1'b1) && (ex_wd_i == reg2_addr_o)) begin
+            reg2_o  <= ex_wdata_i;
+        end else if ((reg2_read_o == 1'b1) && (mem_wreg_i == 1'b1) && (mem_wd_i == reg2_addr_o)) begin
+            reg2_o  <= mem_wdata_i;
+        end else if (reg2_read_o == 1'b1) begin
             reg2_o  <= reg2_data_i;
-        end else if (reg2_read_o == `ReadDisable) begin
+        end else if (reg2_read_o == 1'b0) begin
             reg2_o  <= imm;
         end else begin
             reg2_o  <= `ZeroWord;

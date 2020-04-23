@@ -113,6 +113,16 @@ module bitty_riscv(
         .reg1_data_i(reg1_data),
         .reg2_data_i(reg2_data),
 
+        // from ex
+        .ex_wreg_i(ex_wreg_o),
+        .ex_wdata_i(ex_wdata_o),
+        .ex_wd_i(ex_wd_o),
+
+        // from wd mem
+        .mem_wreg_i(mem_wreg_o),
+        .mem_wdata_i(mem_wdata_o),
+        .mem_wd_i(mem_wd_o),
+
         // 送入 regfile 的信息
         .reg1_read_o(reg1_read),
         .reg2_read_o(reg2_read),

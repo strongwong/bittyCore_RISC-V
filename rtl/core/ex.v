@@ -42,24 +42,101 @@ module ex(
     output  reg[`RegBus]        wdata_o
 );
 
+    // 相减结果
+    wire[31:0]      exe_res_sub = reg1_i - reg2_i;
+
     // 保存逻辑运算的结果
     reg[`RegBus]    logicout;
+    reg[`RegBus]    compare;        // 比较结果
+    reg[`RegBus]    shiftres;       // 移位结果
+    reg[`RegBus]    arithres;       // 算术结果
 
-    // 1. 根据 aluop_i 指示的运算子类型进行运算，这里只有逻辑 “或”运算
+    // 1. 根据 aluop_i 指示的运算子类型进行运算 
+    // logic 
     always @ (*) begin
         if (rst == `RstEnable) begin
             logicout    <= `ZeroWord;
         end else begin
             case (aluop_i)
+                `EXE_AND: begin
+                    logicout    <= (reg1_i & reg2_i);
+                end
                 `EXE_OR: begin
-                    logicout    <= reg1_i | reg2_i;
+                    logicout    <= (reg1_i | reg2_i);
                 end 
+                `EXE_XOR: begin
+                    logicout    <= (reg1_i ^ reg2_i);
+                end
                 default:   begin
                     logicout    <= `ZeroWord;
                 end
             endcase
         end // if
     end // always
+
+    // compare
+    always @ (*) begin
+        if (rst == `RstEnable) begin
+            compare <= `ZeroWord;
+        end else begin
+            case (aluop_i)
+                `EXE_SLT:  begin
+                    if (reg1_i[31] != reg2_i[31]) begin
+                        compare <= (reg1_i[31] ? 32'h1 : 32'h0);
+                    end else begin
+                        compare <= (exe_res_sub[31] ? 32'h1 : 32'h0);
+                    end
+                end 
+                `EXE_SLTU: begin
+                    compare <= ((reg1_i < reg2_i) ? 32'h1 : 32'h0);
+                end
+                default: begin
+                    compare <= `ZeroWord;
+                end
+            endcase
+        end
+    end
+
+    // shift
+    always @ (*) begin
+        if (rst == `RstEnable) begin
+            shiftres    <= `ZeroWord;
+        end else begin
+            case (aluop_i)
+                `EXE_SLL: begin
+                    shiftres    <= (reg1_i << reg2_i[4:0]);
+                end
+                `EXE_SRL: begin
+                    shiftres    <= (reg1_i >> reg2_i[4:0]);
+                end 
+                `EXE_SRA: begin
+                    shiftres    <= (({32{reg1_i[31]}} << (6'd32 - {1'b0, reg2_i[4:0]})) | (reg1_i >> reg2_i[4:0]));
+                end
+                default: begin
+                    shiftres    <= `ZeroWord;
+                end
+            endcase
+        end
+    end
+
+    // arith
+    always @ (*) begin
+        if (rst == `RstEnable) begin
+            arithres    <= `ZeroWord;
+        end else begin
+            case (aluop_i)
+                `EXE_ADD: begin
+                    arithres    <= (reg1_i + reg2_i);
+                end 
+                `EXE_SUB: begin
+                    arithres    <= (reg1_i - reg2_i);
+                end
+                default: begin
+                    arithres    <= `ZeroWord;
+                end 
+            endcase
+        end
+    end
 
     // 2. 根据 alusel_i 指示的运算类型，选择一个运算结果作为最终结果
     always @ (*) begin
@@ -69,6 +146,15 @@ module ex(
             `EXE_RES_LOGIC: begin
                 wdata_o <= logicout;    // wdata_o 中存放运算结果
             end 
+            `EXE_RES_COMPARE: begin
+                wdata_o <= compare;  
+            end
+            `EXE_RES_SHIFT: begin
+                wdata_o <= shiftres;
+            end
+            `EXE_RES_ARITH: begin
+                wdata_o <= arithres;
+            end
             default:    begin
                 wdata_o <= `ZeroWord;
             end

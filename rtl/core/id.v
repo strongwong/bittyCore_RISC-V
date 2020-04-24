@@ -103,22 +103,177 @@ module id(
             case (opcode)
                 `INST_I_TYPE:   begin
                     case (funct3)
-                        `INST_ORI:  begin                                       // 根据 opcode 和 funct3 判断 ori 指令
+                        `INST_ADDI: begin       // addi
+                            wreg_o      <= `WriteEnable;                      
+                            aluop_o     <= `EXE_ADD;                           
+                            alusel_o    <= `EXE_RES_ARITH;                    
+                            reg1_read_o <= `ReadEnable;                         
+                            reg2_read_o <= `ReadDisable;                       
+                            imm         <= {{20{inst_i[31]}}, inst_i[31:20]}; 
+                            wd_o        <= rd;                                  
+                            instvalid   <= `InstValid;                          
+                        end
+                        `INST_SLTI: begin       // slti
+                            wreg_o      <= `WriteEnable;                      
+                            aluop_o     <= `EXE_SLT;                           
+                            alusel_o    <= `EXE_RES_COMPARE;                    
+                            reg1_read_o <= `ReadEnable;                         
+                            reg2_read_o <= `ReadDisable;                       
+                            imm         <= {{20{inst_i[31]}}, inst_i[31:20]}; 
+                            wd_o        <= rd;                                  
+                            instvalid   <= `InstValid; 
+                        end
+                        `INST_SLTIU: begin      // sltiu
+                            wreg_o      <= `WriteEnable;                      
+                            aluop_o     <= `EXE_SLTU;                           
+                            alusel_o    <= `EXE_RES_COMPARE;                    
+                            reg1_read_o <= `ReadEnable;                         
+                            reg2_read_o <= `ReadDisable;                       
+                            imm         <= {{20{inst_i[31]}}, inst_i[31:20]}; 
+                            wd_o        <= rd;                                  
+                            instvalid   <= `InstValid;
+                        end
+                        `INST_XORI: begin       // xori
+                            wreg_o      <= `WriteEnable;                      
+                            aluop_o     <= `EXE_XOR;                           
+                            alusel_o    <= `EXE_RES_LOGIC;                    
+                            reg1_read_o <= `ReadEnable;                         
+                            reg2_read_o <= `ReadDisable;                       
+                            imm         <= {{20{inst_i[31]}}, inst_i[31:20]}; 
+                            wd_o        <= rd;                                  
+                            instvalid   <= `InstValid;
+                        end
+                        `INST_ORI:  begin       // ori                          // 根据 opcode 和 funct3 判断 ori 指令
                             wreg_o      <= `WriteEnable;                        // ori 指令需要将结果写入目的寄存器
                             aluop_o     <= `EXE_OR;                             // 运算子类型是逻辑“或”运算
                             alusel_o    <= `EXE_RES_LOGIC;                      // 运算类型是逻辑运算
                             reg1_read_o <= `ReadEnable;                         // 读端口 1 读取寄存器
                             reg2_read_o <= `ReadDisable;                        // 不用读
-                            imm         <= {{20{inst_i[31]}}, inst_i[31:20]};   // 指令执行需要立即数
+                            imm         <= {{20{inst_i[31]}}, inst_i[31:20]};   // 指令执行需要立即数,有符号扩展
                             wd_o        <= rd;                                  // 目的寄存器地址
                             instvalid   <= `InstValid;                          // ori 指令有效指令
                         end 
+                        `INST_ANDI: begin       // andi
+                            wreg_o      <= `WriteEnable;                      
+                            aluop_o     <= `EXE_AND;                           
+                            alusel_o    <= `EXE_RES_LOGIC;                    
+                            reg1_read_o <= `ReadEnable;                         
+                            reg2_read_o <= `ReadDisable;                       
+                            imm         <= {{20{inst_i[31]}}, inst_i[31:20]}; 
+                            wd_o        <= rd;                                  
+                            instvalid   <= `InstValid;
+                        end
+                        `INST_SLLI: begin       // slli
+                            wreg_o      <= `WriteEnable; 
+                            aluop_o     <= `EXE_SLL;   
+                            alusel_o    <= `EXE_RES_SHIFT; 
+                            reg1_read_o <= `ReadEnable;  
+                            reg2_read_o <= `ReadDisable;    
+                            imm         <= {27'b0, inst_i[24:20]}; 
+                            wd_o        <= rd;                 
+                            instvalid   <= `InstValid;
+                        end
+                        `INST_SRI: begin       // srli , srai
+                            wreg_o      <= `WriteEnable;
+                            if (inst_i[30] == 1'b0) begin
+                                aluop_o     <= `EXE_SRL; 
+                            end else begin
+                                aluop_o     <= `EXE_SRA;
+                            end                      
+                            alusel_o    <= `EXE_RES_SHIFT;                    
+                            reg1_read_o <= `ReadEnable;                         
+                            reg2_read_o <= `ReadDisable;                       
+                            imm         <= {27'b0, inst_i[24:20]}; 
+                            wd_o        <= rd;                                  
+                            instvalid   <= `InstValid;
+                        end
                         default:  begin
                             instvalid   <= `InstInvalid;
                         end
-                    endcase                   
-
+                    endcase 
                 end 
+                
+                `INST_R_TYPE: begin
+                    case (funct3)
+                        `INST_ADD: begin        // add , sub
+                            wreg_o      <= `WriteEnable;
+                            if (inst_i[30] == 1'b0) begin
+                                aluop_o     <= `EXE_ADD; 
+                            end else begin
+                                aluop_o     <= `EXE_SUB;
+                            end                      
+                            alusel_o    <= `EXE_RES_ARITH; 
+                            reg1_read_o <= `ReadEnable; 
+                            reg2_read_o <= `ReadEnable;
+                            instvalid   <= `InstValid;
+                        end 
+                        `INST_SLL: begin        // sll
+                            wreg_o      <= `WriteEnable; 
+                            aluop_o     <= `EXE_SLL;   
+                            alusel_o    <= `EXE_RES_SHIFT; 
+                            reg1_read_o <= `ReadEnable;  
+                            reg2_read_o <= `ReadEnable; 
+                            instvalid   <= `InstValid;
+                        end
+                        `INST_SLT: begin        // slt
+                            wreg_o      <= `WriteEnable; 
+                            aluop_o     <= `EXE_SLT;   
+                            alusel_o    <= `EXE_RES_COMPARE; 
+                            reg1_read_o <= `ReadEnable;  
+                            reg2_read_o <= `ReadEnable;                   
+                            instvalid   <= `InstValid;
+                        end
+                        `INST_SLTU: begin       // sltu
+                            wreg_o      <= `WriteEnable; 
+                            aluop_o     <= `EXE_SLTU;   
+                            alusel_o    <= `EXE_RES_COMPARE; 
+                            reg1_read_o <= `ReadEnable;  
+                            reg2_read_o <= `ReadEnable; 
+                            instvalid   <= `InstValid;
+                        end
+                        `INST_XOR : begin       // xor
+                            wreg_o      <= `WriteEnable; 
+                            aluop_o     <= `EXE_XOR;   
+                            alusel_o    <= `EXE_RES_LOGIC; 
+                            reg1_read_o <= `ReadEnable;  
+                            reg2_read_o <= `ReadEnable; 
+                            instvalid   <= `InstValid;
+                        end
+                        `INST_SRL : begin       // srl ,sra 
+                            if (inst_i[30] == 1'b0) begin
+                                aluop_o     <= `EXE_SRL; 
+                            end else begin
+                                aluop_o     <= `EXE_SRA;
+                            end                      
+                            wreg_o      <= `WriteEnable;
+                            alusel_o    <= `EXE_RES_SHIFT; 
+                            reg1_read_o <= `ReadEnable; 
+                            reg2_read_o <= `ReadEnable;
+                            instvalid   <= `InstValid;
+                        end
+                        `INST_OR : begin        // or
+                            wreg_o      <= `WriteEnable; 
+                            aluop_o     <= `EXE_OR;   
+                            alusel_o    <= `EXE_RES_LOGIC; 
+                            reg1_read_o <= `ReadEnable;  
+                            reg2_read_o <= `ReadEnable; 
+                            instvalid   <= `InstValid;
+                        end
+                        `INST_AND: begin        // and
+                            wreg_o      <= `WriteEnable; 
+                            aluop_o     <= `EXE_AND;   
+                            alusel_o    <= `EXE_RES_LOGIC; 
+                            reg1_read_o <= `ReadEnable;  
+                            reg2_read_o <= `ReadEnable; 
+                            instvalid   <= `InstValid;
+                        end
+                        default: begin
+                            instvalid   <= `InstInvalid;
+                        end
+                    endcase
+                end
+                
+                
                 default: begin
                     instvalid   <= `InstInvalid;
                 end

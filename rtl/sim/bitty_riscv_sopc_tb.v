@@ -36,12 +36,36 @@ module  bitty_riscv_sopc_tb();
         forever #10 CLOCK_50    = ~CLOCK_50;
     end 
 
+    wire[31:0]  x3  =  u_bitty_riscv_sopc.u_bitty_riscv.u_regsfile.regs[3];
+    wire[31:0]  x26 =  u_bitty_riscv_sopc.u_bitty_riscv.u_regsfile.regs[26];
+    wire[31:0]  x27 =  u_bitty_riscv_sopc.u_bitty_riscv.u_regsfile.regs[27];
+
     // 最初时刻，复位信号有效，在第 195ns，复位信号无效，最小 SOPC 开始运行
     // 运行 1000ns 后，暂停仿真
     initial begin
         rst = 1'b0;
         #195    rst = 1'b1;
-        #1000   $stop;
+        $display("--------- test running --------");
+
+        wait(x26 == 32'h1);     // 测试结束
+        #100
+        if (x27 == 32'h1) begin     // 27bit 为 1 就 ok
+            $display("********** ######### ***********");
+            $display("********** test pass ***********");
+            $display("********** ######### ***********");
+        end else begin
+            $display("********** ######### ***********");
+            $display("********** test fail ***********");
+            $display("********** ######### ***********");
+            $display("test fail inst = %2d", x3);       // 第多少条指令出错
+        end
+        $stop;
+    end
+
+    initial begin
+        #100000
+        $display("#####--Time out--#####");
+        $stop;
     end
 
     // 例化最小 sopc

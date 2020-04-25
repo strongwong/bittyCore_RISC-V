@@ -28,9 +28,9 @@ SOFTWARE.
 module ex(
     input   wire            rst,
 
-    // from id 译码阶段送到执行阶段的信息
-    input   wire[`InstAddrBus]  pc_i,
-    input   wire[`InstBus]      inst_i,
+    // from id/ex 译码阶段送到执行阶段的信息
+    input   wire[`InstAddrBus]  ex_pc,
+    input   wire[`InstBus]      ex_inst,
     input   wire[`AluOpBus]     aluop_i,
     input   wire[`AluSelBus]    alusel_i,
     input   wire[`RegBus]       reg1_i,
@@ -156,7 +156,7 @@ module ex(
                 `EXE_BEQ: begin
                     if (reg1_i == reg2_i) begin
                         branch_flag_o   <= `BranchEnable;
-                        branch_addr_o   <= pc_i + {20{inst_i[31]}, inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
+                        branch_addr_o   <= ex_pc + {20{ex_inst[31]}, ex_inst[7], ex_inst[30:25], ex_inst[11:8], 1'b0};
                     end else begin
                         branch_flag_o   <= `BranchDisable;
                     end
@@ -164,7 +164,7 @@ module ex(
                 `EXE_BNE: begin
                     if (reg1_i != reg2_i) begin
                         branch_flag_o   <= `BranchEnable;
-                        branch_addr_o   <= pc_i + {20{inst_i[31]}, inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
+                        branch_addr_o   <= ex_pc + {20{ex_inst[31]}, ex_inst[7], ex_inst[30:25], ex_inst[11:8], 1'b0};
                     end else begin
                         branch_flag_o   <= `BranchDisable;
                     end
@@ -172,10 +172,10 @@ module ex(
                 `EXE_BLT: begin
                     if (reg1_i[31] != reg2_i[31]) begin
                         branch_flag_o   <= (reg1_i[31] ? `BranchEnable : `BranchDisable);
-                        branch_addr_o   <= pc_i + {20{inst_i[31]}, inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
+                        branch_addr_o   <= ex_pc + {20{ex_inst[31]}, ex_inst[7], ex_inst[30:25], ex_inst[11:8], 1'b0};
                     end else if (reg1_i < reg2_i) begin
                         branch_flag_o   <= `BranchEnable;
-                        branch_addr_o   <= pc_i + {20{inst_i[31]}, inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0}; 
+                        branch_addr_o   <= ex_pc + {20{ex_inst[31]}, ex_inst[7], ex_inst[30:25], ex_inst[11:8], 1'b0}; 
                     end else begin
                         branch_flag_o   <= `BranchDisable;
                     end
@@ -185,16 +185,16 @@ module ex(
                         branch_flag_o   <= `BranchDisable;
                     end else begin
                         branch_flag_o   <= `BranchEnable;
-                        branch_addr_o   <= pc_i + {20{inst_i[31]}, inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
+                        branch_addr_o   <= ex_pc + {20{ex_inst[31]}, ex_inst[7], ex_inst[30:25], ex_inst[11:8], 1'b0};
                     end
                 end
                 `EXE_BLTU: begin
                     if (reg1_i[31] != reg2_i[31]) begin
                         branch_flag_o   <= (reg1_i[31] ? `BranchDisable : `BranchEnable);
-                        branch_addr_o   <= pc_i + {20{inst_i[31]}, inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
+                        branch_addr_o   <= ex_pc + {20{ex_inst[31]}, ex_inst[7], ex_inst[30:25], ex_inst[11:8], 1'b0};
                     end else if (reg1_i < reg2_i) begin
                         branch_flag_o   <= `BranchEnable;
-                        branch_addr_o   <= pc_i + {20{inst_i[31]}, inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
+                        branch_addr_o   <= ex_pc + {20{ex_inst[31]}, ex_inst[7], ex_inst[30:25], ex_inst[11:8], 1'b0};
                     end else begin
                         branch_flag_o   <= `BranchDisable;
                     end
@@ -204,7 +204,7 @@ module ex(
                         branch_flag_o   <= `BranchDisable;
                     end else begin
                         branch_flag_o   <= `BranchEnable;
-                        branch_addr_o   <= pc_i + {20{inst_i[31]}, inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
+                        branch_addr_o   <= ex_pc + {20{ex_inst[31]}, ex_inst[7], ex_inst[30:25], ex_inst[11:8], 1'b0};
                     end
                 end
 

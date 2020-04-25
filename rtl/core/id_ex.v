@@ -30,6 +30,8 @@ module id_ex(
     input   wire        rst,
 
     // 从译码段传递过来的信息
+    input   wire[`InstAddrBus]  id_pc_i,
+    input   wire[`InstBus]      id_inst_i,
     input   wire[`AluOpBus]     id_aluop,
     input   wire[`AluSelBus]    id_alusel,
     input   wire[`RegBus]       id_reg1,
@@ -38,6 +40,8 @@ module id_ex(
     input   wire                id_wreg,
 
     // 传递到执行段的信息
+    output  reg[`InstAddrBus]   ex_pc_o,
+    output  reg[`InstBus]       ex_inst_o,
     output  reg[`AluOpBus]      ex_aluop,
     output  reg[`AluSelBus]     ex_alusel,
     output  reg[`RegBus]        ex_reg1,
@@ -48,6 +52,8 @@ module id_ex(
 
     always @ (posedge clk)  begin
         if (rst == `RstEnable) begin
+            ex_pc_o     <= `ZeroWord;
+            ex_inst_o   <= `ZeroWord;
             ex_aluop    <= `EXE_NONE;
             ex_alusel   <= `EXE_RES_NONE;
             ex_reg1     <= `ZeroWord;
@@ -55,6 +61,8 @@ module id_ex(
             ex_wd       <= `NOPRegAddr;
             ex_wreg     <= `WriteDisable;
         end else begin
+            ex_pc_o     <= id_pc_i;
+            ex_inst_o   <= id_inst_i;
             ex_aluop    <= id_aluop;
             ex_alusel   <= id_alusel;
             ex_reg1     <= id_reg1;

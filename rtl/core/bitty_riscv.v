@@ -40,6 +40,8 @@ module bitty_riscv(
     wire[`InstBus]          id_inst_i;
 
     // 连接译码阶段 ID 模块输出与 ID/EX 模块的输入的变量
+    wire[`InstAddrBus]      id_pc_o;
+    wire[`InstBus]          id_inst_o;
     wire[`AluOpBus]         id_aluop_o;
     wire[`AluSelBus]        id_alusel_o;
     wire[`RegBus]           id_reg1_o;
@@ -48,6 +50,8 @@ module bitty_riscv(
     wire[`RegAddrBus]       id_wd_o;
 
     // 连接 ID/EX 模块输出与执行阶段 EX 模块的输入变量
+    wire[`InstAddrBus]      ex_pc_i;
+    wire[`InstBus]          ex_inst_i;
     wire[`AluOpBus]         ex_aluop_i;
     wire[`AluSelBus]        ex_alusel_i;
     wire[`RegBus]           ex_reg1_i;
@@ -59,6 +63,10 @@ module bitty_riscv(
     wire                    ex_wreg_o;
     wire[`RegAddrBus]       ex_wd_o;
     wire[`RegBus]           ex_wdata_o;
+
+    // ex to pc_reg
+    wire                    ex_branch_flag_o;
+    wire[`RegBus]           ex_branch_addr_o;
 
     // 连接 EX/MEM 模块的输出与访存阶段 MEM 模块的输入的变量
     wire                    mem_wreg_i;
@@ -87,6 +95,8 @@ module bitty_riscv(
     pc_reg  u_pc_reg(
         .clk(clk),
         .rst(rst),
+        .branch_flag_i(ex_branch_flag_o),
+        .branch_addr_i(ex_branch_addr_o),
         .pc(pc),
         .ce(rom_ce_o)
     );
@@ -130,6 +140,8 @@ module bitty_riscv(
         .reg2_addr_o(reg2_addr),
 
         // 送到 ID/EX 的信息
+        .pc_o(id_pc_o),
+        .inst_o(id_inst_o),
         .aluop_o(id_aluop_o),
         .alusel_o(id_alusel_o),
         .reg1_o(id_reg1_o),
@@ -160,6 +172,8 @@ module bitty_riscv(
         .rst(rst),
 
         // 从译码阶段 ID 模块来的信息
+        .id_pc_i(id_pc_o),
+        .id_inst_i(id_inst_o),
         .id_aluop(id_aluop_o),
         .id_alusel(id_alusel_o),
         .id_reg1(id_reg1_o),
@@ -168,6 +182,8 @@ module bitty_riscv(
         .id_wreg(id_wreg_o),
 
         // 传递到执行阶段 EX 模块的信息
+        .ex_pc_o(ex_pc_i),
+        .ex_inst_o(ex_inst_i),
         .ex_aluop(ex_aluop_i),
         .ex_alusel(ex_alusel_i),
         .ex_reg1(ex_reg1_i),
@@ -181,6 +197,8 @@ module bitty_riscv(
         .rst(rst),
 
         // 从 ID/EX 模块来的信息
+        .ex_pc(ex_pc_i),
+        .ex_inst(ex_inst_i),
         .aluop_i(ex_aluop_i),
         .alusel_i(ex_alusel_i),
         .reg1_i(ex_reg1_i),
@@ -191,7 +209,11 @@ module bitty_riscv(
         // 输出到 ID/MEM 模块的信息
         .wd_o(ex_wd_o),
         .wreg_o(ex_wreg_o),
-        .wdata_o(ex_wdata_o)
+        .wdata_o(ex_wdata_o),
+
+        // ex to pc_reg
+        .branch_flag_o(ex_branch_flag_o),
+        .branch_addr_o(ex_branch_addr_o)
     );
 
     // EX/MEM 例化

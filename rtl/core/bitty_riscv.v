@@ -188,7 +188,7 @@ module bitty_riscv(
         .wd_i(ex_wd_i),
         .wreg_i(ex_wreg_i),
 
-        // 输出到 EX/MEM 模块的信息
+        // 输出到 ID/MEM 模块的信息
         .wd_o(ex_wd_o),
         .wreg_o(ex_wreg_o),
         .wdata_o(ex_wdata_o)
@@ -235,7 +235,7 @@ module bitty_riscv(
         .mem_wreg(mem_wreg_o),
         .mem_wdata(mem_wdata_o),
 
-        // 送到回写阶段的信息
+        // 送到回写阶段的信息 to id/regsfile
         .wb_wd(wb_wd_i),
         .wb_wreg(wb_wreg_i),
         .wb_wdata(wb_wdata_i)

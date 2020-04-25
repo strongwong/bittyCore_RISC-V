@@ -29,6 +29,9 @@ module pc_reg(
     input       wire                clk,
     input       wire                rst,
 
+    input       wire                branch_flag_i,
+    input       wire[`RegBus]       branch_addr_i,
+
     output      reg[`InstAddrBus]   pc,
     output      reg                 ce 
 );
@@ -44,6 +47,8 @@ module pc_reg(
     always  @ (posedge clk) begin
         if (ce == `ReadDisable) begin
             pc  <=  `ZeroWord;
+        end if (branch_flag_i == `BranchEnable) begin
+            pc <= branch_addr_i;
         end else begin
             pc  <= pc + 4'h4;
         end

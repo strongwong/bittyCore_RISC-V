@@ -28,7 +28,9 @@ SOFTWARE.
 module ex(
     input   wire            rst,
 
-    // 译码阶段送到执行阶段的信息
+    // from id 译码阶段送到执行阶段的信息
+    input   wire[`InstAddrBus]  pc_i,
+    input   wire[`InstBus]      inst_i,
     input   wire[`AluOpBus]     aluop_i,
     input   wire[`AluSelBus]    alusel_i,
     input   wire[`RegBus]       reg1_i,
@@ -36,10 +38,14 @@ module ex(
     input   wire[`RegAddrBus]   wd_i,
     input   wire                wreg_i,
 
-    // 执行结果
+    // 执行结果 to ex_mem
     output  reg[`RegAddrBus]    wd_o,
     output  reg                 wreg_o,
     output  reg[`RegBus]        wdata_o
+
+    // output  pc_reg
+    output  reg                 branch_flag_o;
+    output  reg[`RegBus]        branch_addr_o;
 );
 
     // 相减结果
@@ -112,6 +118,9 @@ module ex(
                 `EXE_SRA: begin
                     shiftres    <= (({32{reg1_i[31]}} << (6'd32 - {1'b0, reg2_i[4:0]})) | (reg1_i >> reg2_i[4:0]));
                 end
+                `EXE_LUI: begin
+                    shiftres    <= reg2_i;
+                end
                 default: begin
                     shiftres    <= `ZeroWord;
                 end
@@ -134,6 +143,74 @@ module ex(
                 default: begin
                     arithres    <= `ZeroWord;
                 end 
+            endcase
+        end
+    end
+
+    always @ (*) begin
+        if (rst == `RstEnable) begin
+            branch_flag_o   <= `BranchDisable;
+            branch_addr_o   <= `ZeroWord;
+        end else begin
+            case (aluop_i)
+                `EXE_BEQ: begin
+                    if (reg1_i == reg2_i) begin
+                        branch_flag_o   <= `BranchEnable;
+                        branch_addr_o   <= pc_i + {20{inst_i[31]}, inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
+                    end else begin
+                        branch_flag_o   <= `BranchDisable;
+                    end
+                end 
+                `EXE_BNE: begin
+                    if (reg1_i != reg2_i) begin
+                        branch_flag_o   <= `BranchEnable;
+                        branch_addr_o   <= pc_i + {20{inst_i[31]}, inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
+                    end else begin
+                        branch_flag_o   <= `BranchDisable;
+                    end
+                end
+                `EXE_BLT: begin
+                    if (reg1_i[31] != reg2_i[31]) begin
+                        branch_flag_o   <= (reg1_i[31] ? `BranchEnable : `BranchDisable);
+                        branch_addr_o   <= pc_i + {20{inst_i[31]}, inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
+                    end else if (reg1_i < reg2_i) begin
+                        branch_flag_o   <= `BranchEnable;
+                        branch_addr_o   <= pc_i + {20{inst_i[31]}, inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0}; 
+                    end else begin
+                        branch_flag_o   <= `BranchDisable;
+                    end
+                end
+                `EXE_BGE: begin
+                    if (reg1_i < reg2_i) begin
+                        branch_flag_o   <= `BranchDisable;
+                    end else begin
+                        branch_flag_o   <= `BranchEnable;
+                        branch_addr_o   <= pc_i + {20{inst_i[31]}, inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
+                    end
+                end
+                `EXE_BLTU: begin
+                    if (reg1_i[31] != reg2_i[31]) begin
+                        branch_flag_o   <= (reg1_i[31] ? `BranchDisable : `BranchEnable);
+                        branch_addr_o   <= pc_i + {20{inst_i[31]}, inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
+                    end else if (reg1_i < reg2_i) begin
+                        branch_flag_o   <= `BranchEnable;
+                        branch_addr_o   <= pc_i + {20{inst_i[31]}, inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
+                    end else begin
+                        branch_flag_o   <= `BranchDisable;
+                    end
+                end
+                `EXE_BGEU: begin
+                    if (reg1_i < reg2_i) begin
+                        branch_flag_o   <= `BranchDisable;
+                    end else begin
+                        branch_flag_o   <= `BranchEnable;
+                        branch_addr_o   <= pc_i + {20{inst_i[31]}, inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
+                    end
+                end
+
+                default: begin
+                    branch_flag_o   <= `BranchDisable;
+                end
             endcase
         end
     end

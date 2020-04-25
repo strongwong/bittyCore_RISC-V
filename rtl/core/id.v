@@ -51,6 +51,8 @@ module id(
     output  reg[`RegAddrBus]        reg2_addr_o,
 
     // output execution
+    output  reg[`InstAddrBus]       pc_o,
+    output  reg[`InstBus]           inst_o,
     output  reg[`AluOpBus]          aluop_o,
     output  reg[`AluSelBus]         alusel_o,
     output  reg[`RegBus]            reg1_o,
@@ -70,7 +72,8 @@ module id(
     wire[6:0]   funct7  = inst_i[31:25];
 
     // 保存指令执行需要的立即数
-    reg[`RegBus]    imm;
+    reg[`RegBus]    imm_1;
+    reg[`RegBus]    imm_2;
 
     // 指示指令是否有效
     reg     instvalid;
@@ -87,7 +90,9 @@ module id(
             reg2_read_o <= `ReadDisable;
             reg1_addr_o <= `NOPRegAddr;
             reg2_addr_o <= `NOPRegAddr;
-            imm         <= `ZeroWord;
+            imm_1       <= `ZeroWord;
+            imm_2       <= `ZeroWord;
+            inst_o      <= `ZeroWord;
         end else begin
             aluop_o     <= `EXE_NONE;
             alusel_o    <= `EXE_RES_NONE;
@@ -98,9 +103,79 @@ module id(
             reg2_read_o <= `ReadDisable;
             reg1_addr_o <= rs1;
             reg2_addr_o <= rs2;
-            imm         <= `ZeroWord;
+            imm_1       <= `ZeroWord;
+            imm_2       <= `ZeroWord;
+            inst_o      <= `ZeroWord;
 
             case (opcode)
+                `INST_LUI   : begin     // lui
+                    wreg_o      <= `WriteEnable;
+                    aluop_o     <= `EXE_LUI;
+                    alusel_o    <= `EXE_RES_SHIFT;
+                    imm_2       <= {inst_i[31:12], 12'b0};
+                    wd_o        <= rd;
+                    instvalid   <= `InstValid;
+                end
+                `INST_AUIPC : begin     // auipc
+                    wreg_o      <= `WriteEnable;
+                    aluop_o     <= `EXE_ADD;
+                    alusel_o    <= `EXE_RES_ARITH;
+                    imm_1       <= pc_i;
+                    imm_2       <= {inst_i[31:12], 12'b0};
+                    wd_o        <= rd;
+                    instvalid   <= `InstValid;
+                end
+
+                `INST_B_TYPE: begin
+                    case (funct3)
+                        `INST_BEQ: begin
+                            aluop_o     <= `EXE_BEQ;
+                            alusel_o    <= `EXE_RES_BRANCH;
+                            reg1_read_o <= `ReadEnable;
+                            reg2_read_o <= `ReadEnable;
+                            instvalid   <= `InstValid;
+                        end
+                        `INST_BNE: begin
+                            aluop_o     <= `EXE_BNE;
+                            alusel_o    <= `EXE_RES_BRANCH;
+                            reg1_read_o <= `ReadEnable;
+                            reg2_read_o <= `ReadEnable;
+                            instvalid   <= `InstValid;
+                        end
+                        `INST_BLT: begin
+                            aluop_o     <= `EXE_BLT;
+                            alusel_o    <= `EXE_RES_BRANCH;
+                            reg1_read_o <= `ReadEnable;
+                            reg2_read_o <= `ReadEnable;
+                            instvalid   <= `InstValid;
+                        end
+                        `INST_BGE: begin
+                            aluop_o     <= `EXE_BGE;
+                            alusel_o    <= `EXE_RES_BRANCH;
+                            reg1_read_o <= `ReadEnable;
+                            reg2_read_o <= `ReadEnable;
+                            instvalid   <= `InstValid;
+                        end
+                        `INST_BLTU: begin
+                            aluop_o     <= `EXE_BLTU;
+                            alusel_o    <= `EXE_RES_BRANCH;
+                            reg1_read_o <= `ReadEnable;
+                            reg2_read_o <= `ReadEnable;
+                            instvalid   <= `InstValid;
+                        end
+                        `INST_BGEU: begin
+                            aluop_o     <= `EXE_BGEU;
+                            alusel_o    <= `EXE_RES_BRANCH;
+                            reg1_read_o <= `ReadEnable;
+                            reg2_read_o <= `ReadEnable;
+                            instvalid   <= `InstValid;
+                        end
+                        default: begin
+                            instvalid   <= `InstValid;
+                        end 
+                    endcase
+                end
+
                 `INST_I_TYPE:   begin
                     case (funct3)
                         `INST_ADDI: begin       // addi
@@ -109,7 +184,7 @@ module id(
                             alusel_o    <= `EXE_RES_ARITH;                    
                             reg1_read_o <= `ReadEnable;                         
                             reg2_read_o <= `ReadDisable;                       
-                            imm         <= {{20{inst_i[31]}}, inst_i[31:20]}; 
+                            imm_2       <= {{20{inst_i[31]}}, inst_i[31:20]}; 
                             wd_o        <= rd;                                  
                             instvalid   <= `InstValid;                          
                         end
@@ -119,7 +194,7 @@ module id(
                             alusel_o    <= `EXE_RES_COMPARE;                    
                             reg1_read_o <= `ReadEnable;                         
                             reg2_read_o <= `ReadDisable;                       
-                            imm         <= {{20{inst_i[31]}}, inst_i[31:20]}; 
+                            imm_2       <= {{20{inst_i[31]}}, inst_i[31:20]}; 
                             wd_o        <= rd;                                  
                             instvalid   <= `InstValid; 
                         end
@@ -129,7 +204,7 @@ module id(
                             alusel_o    <= `EXE_RES_COMPARE;                    
                             reg1_read_o <= `ReadEnable;                         
                             reg2_read_o <= `ReadDisable;                       
-                            imm         <= {{20{inst_i[31]}}, inst_i[31:20]}; 
+                            imm_2       <= {{20{inst_i[31]}}, inst_i[31:20]}; 
                             wd_o        <= rd;                                  
                             instvalid   <= `InstValid;
                         end
@@ -139,7 +214,7 @@ module id(
                             alusel_o    <= `EXE_RES_LOGIC;                    
                             reg1_read_o <= `ReadEnable;                         
                             reg2_read_o <= `ReadDisable;                       
-                            imm         <= {{20{inst_i[31]}}, inst_i[31:20]}; 
+                            imm_2       <= {{20{inst_i[31]}}, inst_i[31:20]}; 
                             wd_o        <= rd;                                  
                             instvalid   <= `InstValid;
                         end
@@ -149,7 +224,7 @@ module id(
                             alusel_o    <= `EXE_RES_LOGIC;                      // 运算类型是逻辑运算
                             reg1_read_o <= `ReadEnable;                         // 读端口 1 读取寄存器
                             reg2_read_o <= `ReadDisable;                        // 不用读
-                            imm         <= {{20{inst_i[31]}}, inst_i[31:20]};   // 指令执行需要立即数,有符号扩展
+                            imm_2       <= {{20{inst_i[31]}}, inst_i[31:20]};   // 指令执行需要立即数,有符号扩展
                             wd_o        <= rd;                                  // 目的寄存器地址
                             instvalid   <= `InstValid;                          // ori 指令有效指令
                         end 
@@ -159,7 +234,7 @@ module id(
                             alusel_o    <= `EXE_RES_LOGIC;                    
                             reg1_read_o <= `ReadEnable;                         
                             reg2_read_o <= `ReadDisable;                       
-                            imm         <= {{20{inst_i[31]}}, inst_i[31:20]}; 
+                            imm_2       <= {{20{inst_i[31]}}, inst_i[31:20]}; 
                             wd_o        <= rd;                                  
                             instvalid   <= `InstValid;
                         end
@@ -169,7 +244,7 @@ module id(
                             alusel_o    <= `EXE_RES_SHIFT; 
                             reg1_read_o <= `ReadEnable;  
                             reg2_read_o <= `ReadDisable;    
-                            imm         <= {27'b0, inst_i[24:20]}; 
+                            imm_2       <= {27'b0, inst_i[24:20]}; 
                             wd_o        <= rd;                 
                             instvalid   <= `InstValid;
                         end
@@ -183,7 +258,7 @@ module id(
                             alusel_o    <= `EXE_RES_SHIFT;                    
                             reg1_read_o <= `ReadEnable;                         
                             reg2_read_o <= `ReadDisable;                       
-                            imm         <= {27'b0, inst_i[24:20]}; 
+                            imm_2       <= {27'b0, inst_i[24:20]}; 
                             wd_o        <= rd;                                  
                             instvalid   <= `InstValid;
                         end
@@ -298,7 +373,7 @@ module id(
         end else if (reg1_read_o == 1'b1) begin
             reg1_o  <= reg1_data_i;         // regfile port 1 output data
         end else if (reg1_read_o == 1'b0) begin
-            reg1_o  <= imm;                 // 立即数
+            reg1_o  <= imm_1;                 // 立即数
         end else begin
             reg1_o  <= `ZeroWord;
         end
@@ -320,7 +395,7 @@ module id(
         end else if (reg2_read_o == 1'b1) begin
             reg2_o  <= reg2_data_i;
         end else if (reg2_read_o == 1'b0) begin
-            reg2_o  <= imm;
+            reg2_o  <= imm_2;
         end else begin
             reg2_o  <= `ZeroWord;
         end

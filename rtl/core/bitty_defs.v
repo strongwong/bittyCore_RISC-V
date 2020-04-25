@@ -37,6 +37,8 @@ SOFTWARE.
 `define InstInvalid             1'b0
 `define True_v                  1'b1
 `define False_v                 1'b0
+`define BranchEnable            1'b1
+`define BranchDisable           1'b0
 `define ChipEnable              1'b1
 `define ChipDisable             1'b0
 
@@ -64,29 +66,79 @@ SOFTWARE.
 `define INST_OR                 3'b110          // or
 `define INST_AND                3'b111          // and
 
+`define INST_B_TYPE             7'b1100011      // B-type inst
+`define INST_BEQ                3'b000          // beq
+`define INST_BNE                3'b001          // bne
+`define INST_BLT                3'b100          // blt
+`define INST_BGE                3'b101          // bge
+`define INST_BLTU               3'b110          // bltu
+`define INST_BGEU               3'b111          // bgeu
+
+`define INST_JAL                7'b1101111      // J-type inst //jal
+`define INST_JALR               7'b1100111      // jalr
+
+`define INST_LUI                7'b0110111      // lui  U-type inst
+`define INST_AUIPC              7'b0010111      // auipc
+
+`define INST_L_TYPE             7'b0000011      // I-type Load inst 
+`define INST_LB                 3'b000          // lb
+`define INST_LH                 3'b001          // lh
+`define INST_LW                 3'b010          // lw
+`define INST_LBU                3'b100          // lbu
+`define INST_LHU                3'b101          // lhu
+
+`define INST_S_TYPE             7'b0100011      // S-type store inst
+`define INST_SB                 3'b000          // sb
+`define INST_SH                 3'b001          // sh
+`define INST_SW                 3'b010          // sw
+
+`define INST_F_TYPE             7'b0001111      // fence inst
+`define INST_F                  3'b000          // fence
+`define INST_FI                 3'b001          // fence.i
+
+`define INST_CSR_TYPE           7'b1110011      // csr inst
+`define INST_ECALL              3'b000          // ecall  [20]bit 为 0
+`define INST_EBR                3'b000          // ebreak [20]bit 为 1
+`define INST_CSRRW              3'b001          // csrrw
+`define INST_CSRRS              3'b010          // csrrs
+`define INST_CSRRC              3'b011          // csrrc
+`define INST_CSRRWI             3'b101          // csrrwi
+`define INST_CSRRSI             3'b110          // csrrsi
+`define INST_CSRRCI             3'b111          // csrrci
+
 
 //******    执行时对应的指令进行操作相关宏定义  *******//
 //AluOp
-`define EXE_NONE                4'b0000
-`define EXE_ADD                 4'b0001
-`define EXE_SUB                 4'b0010
-`define EXE_AND                 4'b0011
-`define EXE_OR                  4'b0100
-`define EXE_XOR                 4'b0101 
-`define EXE_SLL                 4'b0110
-`define EXE_SRL                 4'b0111
-`define EXE_SRA                 4'b1000
+`define EXE_NONE                5'b00000
+`define EXE_ADD                 5'b00001
+`define EXE_SUB                 5'b00010
+`define EXE_AND                 5'b00011
+`define EXE_OR                  5'b00100
+`define EXE_XOR                 5'b00101 
+`define EXE_SLL                 5'b00110
+`define EXE_SRL                 5'b00111
+`define EXE_SRA                 5'b01000
 
-`define EXE_SLT                 4'b1001
-`define EXE_SLTU                4'b1010 
+`define EXE_SLT                 5'b01001
+`define EXE_SLTU                5'b01010 
 
+`define EXE_LUI                 5'b01011 
  
+`define EXE_BEQ                 5'b01100
+`define EXE_BNE                 5'b01101
+`define EXE_BLT                 5'b01110
+`define EXE_BGE                 5'b01111
+`define EXE_BLTU                5'b10000
+`define EXE_BGEU                5'b10001
+
 
 //AluSel
 `define EXE_RES_LOGIC           3'b001
 `define EXE_RES_SHIFT           3'b010
 `define EXE_RES_ARITH           3'b011
 `define EXE_RES_COMPARE         3'b100
+`define EXE_RES_LOAD_STORE      3'b101
+`define EXE_RES_BRANCH          3'b110
 
 `define EXE_RES_NONE            3'b000
 

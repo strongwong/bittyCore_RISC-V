@@ -56,6 +56,7 @@ module ex(
     reg[`RegBus]    compare;        // 比较结果
     reg[`RegBus]    shiftres;       // 移位结果
     reg[`RegBus]    arithres;       // 算术结果
+    reg[`RegBus]    branchres;      // 跳转回写偏移结果
 
     // 1. 根据 aluop_i 指示的运算子类型进行运算 
     // logic 
@@ -207,6 +208,16 @@ module ex(
                         branch_addr_o   <= ex_pc + {20{ex_inst[31]}, ex_inst[7], ex_inst[30:25], ex_inst[11:8], 1'b0};
                     end
                 end
+                `EXE_JAL:  begin
+                    branch_flag_o   <= `BranchEnable;
+                    branch_addr_o   <= ex_pc + {{12{ex_inst[31]}}, ex_inst[19:12], ex_inst[20], ex_inst[30:21], 1'b0};
+                    branchres       <= ex_pc + 4'h4;
+                end
+                `EXE_JALR: begin
+                    branch_flag_o   <= `BranchEnable;
+                    branch_addr_o   <= (reg1_i + {{20{ex_inst[31]}}, ex_inst[31:20]}) & (32'hfffffffe);
+                    branchres       <= ex_pc + 4'h4;
+                end
 
                 default: begin
                     branch_flag_o   <= `BranchDisable;
@@ -231,6 +242,9 @@ module ex(
             end
             `EXE_RES_ARITH: begin
                 wdata_o <= arithres;
+            end
+            `EXE_RES_BRANCH: begin
+                wdata_o <= branchres;
             end
             default:    begin
                 wdata_o <= `ZeroWord;

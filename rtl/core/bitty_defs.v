@@ -130,6 +130,8 @@ SOFTWARE.
 `define EXE_BGE                 5'b01111
 `define EXE_BLTU                5'b10000
 `define EXE_BGEU                5'b10001
+`define EXE_JAL                 5'b10010
+`define EXE_JALR                5'b10011
 
 
 //AluSel

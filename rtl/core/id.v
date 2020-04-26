@@ -128,44 +128,38 @@ module id(
 
                 `INST_B_TYPE: begin
                     case (funct3)
-                        `INST_BEQ: begin
+                        `INST_BEQ: begin        // beq
                             aluop_o     <= `EXE_BEQ;
-                            alusel_o    <= `EXE_RES_BRANCH;
                             reg1_read_o <= `ReadEnable;
                             reg2_read_o <= `ReadEnable;
                             instvalid   <= `InstValid;
                         end
-                        `INST_BNE: begin
+                        `INST_BNE: begin        // bne
                             aluop_o     <= `EXE_BNE;
-                            alusel_o    <= `EXE_RES_BRANCH;
                             reg1_read_o <= `ReadEnable;
                             reg2_read_o <= `ReadEnable;
                             instvalid   <= `InstValid;
                         end
-                        `INST_BLT: begin
+                        `INST_BLT: begin        // blt
                             aluop_o     <= `EXE_BLT;
-                            alusel_o    <= `EXE_RES_BRANCH;
                             reg1_read_o <= `ReadEnable;
                             reg2_read_o <= `ReadEnable;
                             instvalid   <= `InstValid;
                         end
-                        `INST_BGE: begin
+                        `INST_BGE: begin        // bge
                             aluop_o     <= `EXE_BGE;
-                            alusel_o    <= `EXE_RES_BRANCH;
                             reg1_read_o <= `ReadEnable;
                             reg2_read_o <= `ReadEnable;
                             instvalid   <= `InstValid;
                         end
-                        `INST_BLTU: begin
+                        `INST_BLTU: begin       // bltu
                             aluop_o     <= `EXE_BLTU;
-                            alusel_o    <= `EXE_RES_BRANCH;
                             reg1_read_o <= `ReadEnable;
                             reg2_read_o <= `ReadEnable;
                             instvalid   <= `InstValid;
                         end
-                        `INST_BGEU: begin
+                        `INST_BGEU: begin       // bgeu
                             aluop_o     <= `EXE_BGEU;
-                            alusel_o    <= `EXE_RES_BRANCH;
                             reg1_read_o <= `ReadEnable;
                             reg2_read_o <= `ReadEnable;
                             instvalid   <= `InstValid;
@@ -174,6 +168,24 @@ module id(
                             instvalid   <= `InstValid;
                         end 
                     endcase
+                end
+
+                `INST_JAL:  begin       // jal
+                    wreg_o      <= `WriteEnable;
+                    aluop_o     <= `EXE_JAL;
+                    alusel_o    <= `EXE_RES_BRANCH;
+                    wd_o        <= rd;
+                    instvalid   <= `InstValid;
+                end
+
+                `INST_JALR: begin       // jalr
+                    wreg_o      <= `WriteEnable;
+                    aluop_o     <= `EXE_JALR;
+                    alusel_o    <= `EXE_RES_BRANCH;
+                    reg1_read_o <= `ReadEnable;
+                    reg2_read_o <= `ReadDisable;
+                    wd_o        <= rd;
+                    instvalid   <= `InstValid;
                 end
 
                 `INST_I_TYPE:   begin

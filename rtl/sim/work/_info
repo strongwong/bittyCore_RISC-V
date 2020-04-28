@@ -9,13 +9,13 @@ z2
 cModel Technology
 dD:/intelFPGA/18.1/modelsim_ase/win32aloem
 vbitty_riscv
-Z0 !s110 1587718700
+Z0 !s110 1588085175
 !i10b 1
-!s100 cK2<lR;jJHZ>7Uae54hHb0
-IYL^JT93>LO3_S1UjVUG6[1
+!s100 3GF9[m1h[HAl_MhSX=FjK2
+IG2Rz5XR?9m:D?JH_z<i=F0
 Z1 VDg1SIo80bB@j0V0VzS_@n1
 Z2 dE:/work/GitHub/bittyCore_RISC-V/rtl/sim
-w1587637150
+w1588078510
 8E:/work/GitHub/bittyCore_RISC-V/rtl/core/bitty_riscv.v
 FE:/work/GitHub/bittyCore_RISC-V/rtl/core/bitty_riscv.v
 Z3 L0 28
@@ -23,7 +23,7 @@ Z4 OV;L;10.5b;63
 r1
 !s85 0
 31
-Z5 !s108 1587718700.000000
+Z5 !s108 1588085175.000000
 !s107 E:\work\GitHub\bittyCore_RISC-V\rtl\core\bitty_defs.v|E:/work/GitHub/bittyCore_RISC-V/rtl/core/bitty_riscv.v|
 !s90 -reportprogress|300|-work|work|-stats=none|E:/work/GitHub/bittyCore_RISC-V/rtl/core/bitty_riscv.v|
 !i113 1
@@ -32,11 +32,11 @@ Z7 tCvgOpt 0
 vbitty_riscv_sopc
 R0
 !i10b 1
-!s100 17?QQ=2el]Ic=M<XI<;Pc1
-IX>i<XG:Dz2aY05NaPbTLl2
+!s100 PNKk@4ZhRmnKlY`dH62m82
+ID_9m3[H2`AVfL?GYHPBo82
 R1
 R2
-w1587480606
+w1588079987
 8E:/work/GitHub/bittyCore_RISC-V/rtl/core/bitty_riscv_sopc.v
 FE:/work/GitHub/bittyCore_RISC-V/rtl/core/bitty_riscv_sopc.v
 R3
@@ -71,14 +71,35 @@ R5
 !i113 1
 R6
 R7
-vex
-R0
+vdata_ram
+Z8 !s110 1588085176
 !i10b 1
-!s100 fDdY629U]c_z4_miO:@i;0
-IZS;jBULb30BIl9O><d_F_0
+!s100 `h1I4FH;egoD2UVbg8mV[1
+IEGYd[Y5UgWUnz6]U07LIN0
 R1
 R2
-w1587707525
+w1588080240
+8E:/work/GitHub/bittyCore_RISC-V/rtl/core/data_ram.v
+FE:/work/GitHub/bittyCore_RISC-V/rtl/core/data_ram.v
+R3
+R4
+r1
+!s85 0
+31
+Z9 !s108 1588085176.000000
+!s107 E:\work\GitHub\bittyCore_RISC-V\rtl\core\bitty_defs.v|E:/work/GitHub/bittyCore_RISC-V/rtl/core/data_ram.v|
+!s90 -reportprogress|300|-work|work|-stats=none|E:/work/GitHub/bittyCore_RISC-V/rtl/core/data_ram.v|
+!i113 1
+R6
+R7
+vex
+R8
+!i10b 1
+!s100 gYF]QVaWFmF[X]E<`nHhg2
+I`8lWbI:L:L2MI]DYYH4ID0
+R1
+R2
+w1588067302
 8E:/work/GitHub/bittyCore_RISC-V/rtl/core/ex.v
 FE:/work/GitHub/bittyCore_RISC-V/rtl/core/ex.v
 R3
@@ -86,20 +107,20 @@ R4
 r1
 !s85 0
 31
-R5
+R9
 !s107 E:\work\GitHub\bittyCore_RISC-V\rtl\core\bitty_defs.v|E:/work/GitHub/bittyCore_RISC-V/rtl/core/ex.v|
 !s90 -reportprogress|300|-work|work|-stats=none|E:/work/GitHub/bittyCore_RISC-V/rtl/core/ex.v|
 !i113 1
 R6
 R7
 vex_mem
-R0
+R8
 !i10b 1
-!s100 THM;LFh>b;L5n_B^W1hi30
-I][B>VL`]=gAfd;AWCA1]G0
+!s100 MD`zm1mlh0]KmMl0:oohG2
+IJl91[nF6OG^jdbO>LUneh2
 R1
 R2
-w1587479488
+w1588062846
 8E:/work/GitHub/bittyCore_RISC-V/rtl/core/ex_mem.v
 FE:/work/GitHub/bittyCore_RISC-V/rtl/core/ex_mem.v
 R3
@@ -107,20 +128,20 @@ R4
 r1
 !s85 0
 31
-R5
+R9
 !s107 E:\work\GitHub\bittyCore_RISC-V\rtl\core\bitty_defs.v|E:/work/GitHub/bittyCore_RISC-V/rtl/core/ex_mem.v|
 !s90 -reportprogress|300|-work|work|-stats=none|E:/work/GitHub/bittyCore_RISC-V/rtl/core/ex_mem.v|
 !i113 1
 R6
 R7
 vid
-Z8 !s110 1587718701
+R8
 !i10b 1
-!s100 4LUAz`1n9V`f@C1A>2G=z3
-I]J;idjZ@5K4aPH2[0jgR22
+!s100 >IfVoXcJ8=TiiTL<LemBz3
+IHDAO?UIFRC3N86RgDnDB03
 R1
 R2
-w1587707865
+w1588084441
 8E:/work/GitHub/bittyCore_RISC-V/rtl/core/id.v
 FE:/work/GitHub/bittyCore_RISC-V/rtl/core/id.v
 R3
@@ -128,7 +149,7 @@ R4
 r1
 !s85 0
 31
-R5
+R9
 !s107 E:\work\GitHub\bittyCore_RISC-V\rtl\core\bitty_defs.v|E:/work/GitHub/bittyCore_RISC-V/rtl/core/id.v|
 !s90 -reportprogress|300|-work|work|-stats=none|E:/work/GitHub/bittyCore_RISC-V/rtl/core/id.v|
 !i113 1
@@ -137,11 +158,11 @@ R7
 vid_ex
 R8
 !i10b 1
-!s100 Mc;Tn@]RCGInX;]Y9NDYW1
-IVAZU5B2Y@?I]e;?Ckf9>n0
+!s100 ^NJ05GK>_SNJ[8FfzYZz=2
+IfIO<SzGEk]6o>k^I@@Q@m0
 R1
 R2
-w1587479262
+w1587835078
 8E:/work/GitHub/bittyCore_RISC-V/rtl/core/id_ex.v
 FE:/work/GitHub/bittyCore_RISC-V/rtl/core/id_ex.v
 R3
@@ -149,7 +170,7 @@ R4
 r1
 !s85 0
 31
-Z9 !s108 1587718701.000000
+R9
 !s107 E:\work\GitHub\bittyCore_RISC-V\rtl\core\bitty_defs.v|E:/work/GitHub/bittyCore_RISC-V/rtl/core/id_ex.v|
 !s90 -reportprogress|300|-work|work|-stats=none|E:/work/GitHub/bittyCore_RISC-V/rtl/core/id_ex.v|
 !i113 1
@@ -179,8 +200,8 @@ R7
 vinst_rom
 R8
 !i10b 1
-!s100 O1[nGZGSmPnGJ`>I=Q]oU0
-I1Jn35NhnC8JDQOQh9MUA>1
+!s100 9AjJT0mfYP^JA=>m2FG<S3
+I0dgkDf3>4X<P4bCN_A]hB2
 R1
 R2
 w1587494900
@@ -200,11 +221,11 @@ R7
 vmem
 R8
 !i10b 1
-!s100 K[zlJUe4T[NM;NJPIMDfK0
-I1BWiVM=O2G`14RMfAGNHz1
+!s100 VR`i[ln[zVY6z9ff:Lk@^0
+IgF]QYcD@P=6?zFXd7m4gO2
 R1
 R2
-w1587479547
+w1588070731
 8E:/work/GitHub/bittyCore_RISC-V/rtl/core/mem.v
 FE:/work/GitHub/bittyCore_RISC-V/rtl/core/mem.v
 R3
@@ -240,13 +261,13 @@ R9
 R6
 R7
 vpc_reg
-R8
+!s110 1588085177
 !i10b 1
-!s100 kEQ2iRz]DMKPJh5zb^l2[2
-I<SV3OFGZ>P@KUPKP1nEoz0
+!s100 1WJC;WblGVS:imGEEi2UI1
+I>_zE:_KgG@nPGG9lXW=O02
 R1
 R2
-w1587492790
+w1588082837
 8E:/work/GitHub/bittyCore_RISC-V/rtl/core/pc_reg.v
 FE:/work/GitHub/bittyCore_RISC-V/rtl/core/pc_reg.v
 R3
@@ -254,7 +275,7 @@ R4
 r1
 !s85 0
 31
-R9
+!s108 1588085177.000000
 !s107 E:\work\GitHub\bittyCore_RISC-V\rtl\core\bitty_defs.v|E:/work/GitHub/bittyCore_RISC-V/rtl/core/pc_reg.v|
 !s90 -reportprogress|300|-work|work|-stats=none|E:/work/GitHub/bittyCore_RISC-V/rtl/core/pc_reg.v|
 !i113 1

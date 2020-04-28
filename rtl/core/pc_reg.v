@@ -47,7 +47,7 @@ module pc_reg(
     always  @ (posedge clk) begin
         if (ce == `ReadDisable) begin
             pc  <=  `ZeroWord;
-        end if (branch_flag_i == `BranchEnable) begin
+        end else if (branch_flag_i == `BranchEnable) begin
             pc <= branch_addr_i;
         end else begin
             pc  <= pc + 4'h4;

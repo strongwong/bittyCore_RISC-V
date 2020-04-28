@@ -35,13 +35,28 @@ module bitty_riscv_sopc(
     wire[`InstBus]      inst;
     wire                rom_ce;
 
-    // 例化处理器 openmips
+    // risc-v ram
+    wire                mem_ce_i;
+    wire                mem_we_i;
+    wire[`DataAddrBus]  mem_addr_i;
+    wire[`DataBus]      mem_data_i;
+    wire[`DataBus]      mem_data_o;
+    wire[3:0]           mem_sel_i;
+
+    // 例化处理器 bitty risc-v
     bitty_riscv    u_bitty_riscv(
         .clk(clk),
         .rst(rst),
         .rom_addr_o(inst_addr),
         .rom_data_i(inst),
-        .rom_ce_o(rom_ce)
+        .rom_ce_o(rom_ce),
+
+        .ram_data_i(mem_data_o),
+        .ram_addr_o(mem_addr_i),
+        .ram_data_o(mem_data_i),
+        .ram_we_o(mem_we_i),
+        .ram_sel_o(mem_sel_i),
+        .ram_ce_o(mem_ce_i)
     );
 
     // 例化指令存储器 ROM
@@ -49,6 +64,18 @@ module bitty_riscv_sopc(
         .ce(rom_ce),
         .addr(inst_addr),
         .inst(inst)
+    );
+
+    // ram data
+    data_ram    u_data_ram(
+        .clk(clk),
+        .ce(mem_ce_i),
+        .we(mem_we_i),
+        .addr(mem_addr_i),
+        .sel(mem_sel_i),
+        .data_i(mem_data_i),
+
+        .data_o(mem_data_o)
     );
 
 endmodule // bitty_riscv_sopc

@@ -34,10 +34,18 @@ module ex_mem(
     input   wire                    ex_wreg,
     input   wire[`RegBus]           ex_wdata,
 
+    input   wire[`AluOpBus]         ex_aluop_i,
+    input   wire[`DataAddrBus]      ex_mem_addr_i,
+    input   wire[`RegBus]           ex_reg2_i,
+
     // 送到访存阶段的信息
     output  reg[`RegAddrBus]        mem_wd,
     output  reg                     mem_wreg,
-    output  reg[`RegBus]            mem_wdata
+    output  reg[`RegBus]            mem_wdata,
+
+    output  reg[`AluOpBus]          mem_aluop,
+    output  reg[`DataAddrBus]       mem_mem_addr,
+    output  reg[`RegBus]            mem_reg2
 );
 
     always  @ (posedge clk) begin
@@ -45,10 +53,16 @@ module ex_mem(
             mem_wd      <= `NOPRegAddr;
             mem_wreg    <= `WriteDisable;
             mem_wdata   <= `ZeroWord;
+            mem_aluop   <= `EXE_NONE;
+            mem_mem_addr<= `ZeroWord;
+            mem_reg2    <= `ZeroWord;
         end else begin
             mem_wd      <= ex_wd;
             mem_wreg    <= ex_wreg;
             mem_wdata   <= ex_wdata;
+            mem_aluop   <= ex_aluop_i;
+            mem_mem_addr<= ex_mem_addr_i;
+            mem_reg2    <= ex_reg2_i;
         end
     end
     

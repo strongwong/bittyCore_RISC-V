@@ -29,9 +29,18 @@ module bitty_riscv(
     input   wire            clk,
     input   wire            rst,
 
+    // rom
     input   wire[`RegBus]   rom_data_i,
     output  wire[`RegBus]   rom_addr_o,
-    output  wire            rom_ce_o
+    output  wire            rom_ce_o,
+
+    // ram
+    input   wire[`RegBus]   ram_data_i,
+    output  wire[`RegBus]   ram_addr_o,
+    output  wire[`RegBus]   ram_data_o,
+    output  wire            ram_we_o,
+    output  wire[3:0]       ram_sel_o,
+    output  wire            ram_ce_o
 );
 
     // 连接 IF/ID 模块与译码阶段 ID 模块的变量
@@ -64,6 +73,10 @@ module bitty_riscv(
     wire[`RegAddrBus]       ex_wd_o;
     wire[`RegBus]           ex_wdata_o;
 
+    wire[`AluOpBus]         ex_mem_aluop_o;
+    wire[`DataAddrBus]      ex_addr_o;
+    wire[`RegBus]           ex_mem_reg2_o;
+
     // ex to pc_reg
     wire                    ex_branch_flag_o;
     wire[`RegBus]           ex_branch_addr_o;
@@ -72,6 +85,10 @@ module bitty_riscv(
     wire                    mem_wreg_i;
     wire[`RegAddrBus]       mem_wd_i;
     wire[`RegBus]           mem_wdata_i;
+
+    wire[`AluOpBus]         mem_aluop_i;
+    wire[`DataAddrBus]      mem_mem_addr_i;
+    wire[`RegBus]           mem_reg2_i;
 
     // 连接访存阶段 MEM 模块的输出与 MEM/WB 模块的输入变量
     wire                    mem_wreg_o;
@@ -211,6 +228,10 @@ module bitty_riscv(
         .wreg_o(ex_wreg_o),
         .wdata_o(ex_wdata_o),
 
+        .ex_aluop_o(ex_mem_aluop_o),
+        .ex_mem_addr_o(ex_addr_o),
+        .ex_reg2_o(ex_mem_reg2_o),
+
         // ex to pc_reg
         .branch_flag_o(ex_branch_flag_o),
         .branch_addr_o(ex_branch_addr_o)
@@ -226,10 +247,18 @@ module bitty_riscv(
         .ex_wreg(ex_wreg_o),
         .ex_wdata(ex_wdata_o),
 
+        .ex_aluop_i(ex_mem_aluop_o),
+        .ex_mem_addr_i(ex_addr_o),
+        .ex_reg2_i(ex_mem_reg2_o),
+
         // 送到访存阶段的  MEM 信息
         .mem_wd(mem_wd_i),
         .mem_wreg(mem_wreg_i),
-        .mem_wdata(mem_wdata_i)
+        .mem_wdata(mem_wdata_i),
+
+        .mem_aluop(mem_aluop_i),
+        .mem_mem_addr(mem_mem_addr_i),
+        .mem_reg2(mem_reg2_i)
     );
 
     // MEM 例化
@@ -241,10 +270,24 @@ module bitty_riscv(
         .wreg_i(mem_wreg_i),
         .wdata_i(mem_wdata_i),
 
+        .mem_aluop_i(mem_aluop_i),
+        .mem_mem_addr_i(mem_mem_addr_i),
+        .mem_reg2_i(mem_reg2_i),
+
         // 送到 MEM/WB 的信息
         .wd_o(mem_wd_o),
         .wreg_o(mem_wreg_o),
-        .wdata_o(mem_wdata_o)
+        .wdata_o(mem_wdata_o),
+
+        // from ram
+        .mem_data_i(ram_data_i),
+        
+        // to ram
+        .mem_addr_o(ram_addr_o),
+        .mem_we_o(ram_we_o),
+        .mem_sel_o(ram_sel_o),
+        .mem_data_o(ram_data_o),
+        .mem_ce_o(ram_ce_o)
     );
 
     // MEM/WB 例化

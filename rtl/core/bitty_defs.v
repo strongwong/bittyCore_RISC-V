@@ -31,7 +31,7 @@ SOFTWARE.
 `define WriteDisable            1'b0    
 `define ReadEnable              1'b1
 `define ReadDisable             1'b0
-`define AluOpBus                3:0             //译码阶段的输出 aluop_o 宽度
+`define AluOpBus                4:0             //译码阶段的输出 aluop_o 宽度
 `define AluSelBus               2:0             //译码阶段的输出 alusel_o 宽度
 `define InstValid               1'b1
 `define InstInvalid             1'b0
@@ -133,14 +133,24 @@ SOFTWARE.
 `define EXE_JAL                 5'b10010
 `define EXE_JALR                5'b10011
 
+`define EXE_LB                  5'b10100
+`define EXE_LH                  5'b10101
+`define EXE_LW                  5'b10110
+`define EXE_LBU                 5'b10111
+`define EXE_LHU                 5'b11000
+
+`define EXE_SB                  5'b11001
+`define EXE_SH                  5'b11010
+`define EXE_SW                  5'b11011
 
 //AluSel
 `define EXE_RES_LOGIC           3'b001
 `define EXE_RES_SHIFT           3'b010
 `define EXE_RES_ARITH           3'b011
 `define EXE_RES_COMPARE         3'b100
-`define EXE_RES_LOAD_STORE      3'b101
-`define EXE_RES_BRANCH          3'b110
+`define EXE_RES_LOAD            3'b101
+`define EXE_RES_STORE           3'b110
+`define EXE_RES_BRANCH          3'b111
 
 `define EXE_RES_NONE            3'b000
 
@@ -148,8 +158,15 @@ SOFTWARE.
 //******    与指令存储器 ROM 相关的宏定义    ******//
 `define InstAddrBus             31:0            // rom 地址总线宽度
 `define InstBus                 31:0            // rom 数据总线宽度
-`define InstMemNum              131071          // rom 实际大小 128KB
-`define InstMemNumLog2          17              // rom 实际使用地址线宽度
+`define InstMemNum              65535           // rom 实际大小 64KB
+`define InstMemNumLog2          16             // rom 实际使用地址线宽度
+
+//******                RAM              *******//
+`define DataAddrBus             31:0            // ram addr bus
+`define DataBus                 31:0            // ram data bus
+`define DataMemNum              65535           // ram 64k
+`define DataMemNumLog2          16              // 
+`define ByteWidth               7:0             // one Byte 8bit
 
 //******    与通用寄存器 regfile 有关宏定义  ******//
 `define RegAddrBus              4:0             // regfile 模块的地址线宽度

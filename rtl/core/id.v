@@ -105,7 +105,8 @@ module id(
             reg2_addr_o <= rs2;
             imm_1       <= `ZeroWord;
             imm_2       <= `ZeroWord;
-            inst_o      <= `ZeroWord;
+            inst_o      <= inst_i;
+            pc_o        <= pc_i;
 
             case (opcode)
                 `INST_LUI   : begin     // lui
@@ -186,6 +187,92 @@ module id(
                     reg2_read_o <= `ReadDisable;
                     wd_o        <= rd;
                     instvalid   <= `InstValid;
+                end
+
+                `INST_L_TYPE:   begin
+                    case (funct3)
+                        `INST_LB: begin         // lb
+                            wreg_o      <= `WriteEnable; 
+                            aluop_o     <= `EXE_LB;   
+                            alusel_o    <= `EXE_RES_LOAD; 
+                            reg1_read_o <= `ReadEnable;  
+                            reg2_read_o <= `ReadDisable;  
+                            wd_o        <= rd; 
+                            instvalid   <= `InstValid;
+                        end 
+                        `INST_LH: begin         // lh
+                            wreg_o      <= `WriteEnable; 
+                            aluop_o     <= `EXE_LH;   
+                            alusel_o    <= `EXE_RES_LOAD; 
+                            reg1_read_o <= `ReadEnable;  
+                            reg2_read_o <= `ReadDisable;  
+                            wd_o        <= rd; 
+                            instvalid   <= `InstValid;
+                        end
+                        `INST_LW: begin         // lw
+                            wreg_o      <= `WriteEnable; 
+                            aluop_o     <= `EXE_LW;   
+                            alusel_o    <= `EXE_RES_LOAD; 
+                            reg1_read_o <= `ReadEnable;  
+                            reg2_read_o <= `ReadDisable;  
+                            wd_o        <= rd; 
+                            instvalid   <= `InstValid;
+                        end
+                        `INST_LBU: begin        // lbu
+                            wreg_o      <= `WriteEnable; 
+                            aluop_o     <= `EXE_LBU;   
+                            alusel_o    <= `EXE_RES_LOAD; 
+                            reg1_read_o <= `ReadEnable;  
+                            reg2_read_o <= `ReadDisable;  
+                            wd_o        <= rd; 
+                            instvalid   <= `InstValid;
+                        end
+                        `INST_LHU: begin        // lhu
+                            wreg_o      <= `WriteEnable; 
+                            aluop_o     <= `EXE_LHU;   
+                            alusel_o    <= `EXE_RES_LOAD; 
+                            reg1_read_o <= `ReadEnable;  
+                            reg2_read_o <= `ReadDisable;  
+                            wd_o        <= rd; 
+                            instvalid   <= `InstValid;
+                        end
+
+                        default: begin
+                            instvalid   <= `InstInvalid;
+                        end 
+                    endcase
+                end
+
+                `INST_S_TYPE: begin
+                    case (funct3)
+                        `INST_SB: begin         // sb
+                            wreg_o      <= `WriteDisable; 
+                            aluop_o     <= `EXE_SB;   
+                            alusel_o    <= `EXE_RES_STORE; 
+                            reg1_read_o <= `ReadEnable;  
+                            reg2_read_o <= `ReadEnable;  
+                            instvalid   <= `InstValid;
+                        end
+                        `INST_SH: begin         // sh
+                            wreg_o      <= `WriteDisable; 
+                            aluop_o     <= `EXE_SH;   
+                            alusel_o    <= `EXE_RES_STORE; 
+                            reg1_read_o <= `ReadEnable;  
+                            reg2_read_o <= `ReadEnable;  
+                            instvalid   <= `InstValid;
+                        end
+                        `INST_SW: begin         // sw
+                            wreg_o      <= `WriteDisable; 
+                            aluop_o     <= `EXE_SW;   
+                            alusel_o    <= `EXE_RES_STORE; 
+                            reg1_read_o <= `ReadEnable;  
+                            reg2_read_o <= `ReadEnable;  
+                            instvalid   <= `InstValid;
+                        end
+                        default: begin
+                            instvalid   <=  `InstInvalid;
+                        end
+                    endcase
                 end
 
                 `INST_I_TYPE:   begin

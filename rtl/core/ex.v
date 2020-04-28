@@ -41,12 +41,39 @@ module ex(
     // 执行结果 to ex_mem
     output  reg[`RegAddrBus]    wd_o,
     output  reg                 wreg_o,
-    output  reg[`RegBus]        wdata_o
+    output  reg[`RegBus]        wdata_o,
+
+    output  reg[`AluOpBus]      ex_aluop_o,
+    output  reg[`DataAddrBus]   ex_mem_addr_o,
+    output  reg[`RegBus]        ex_reg2_o,
 
     // output  pc_reg
-    output  reg                 branch_flag_o;
-    output  reg[`RegBus]        branch_addr_o;
+    output  reg                 branch_flag_o,
+    output  reg[`RegBus]        branch_addr_o
 );
+
+    // aluop 传递到 访存阶段
+    always @ (*) begin
+        if (rst == `RstEnable) begin
+            ex_aluop_o  <= `EXE_NONE;
+            ex_reg2_o   <= `ZeroWord;
+            //ex_mem_addr_o  <= `ZeroWord;
+        end else begin
+            ex_aluop_o  <= aluop_i;
+            ex_reg2_o   <= reg2_i;
+            case (alusel_i)
+                `EXE_RES_LOAD: begin
+                    ex_mem_addr_o   <= (reg1_i + {{20{ex_inst[31]}}, ex_inst[31:20]});
+                end
+                `EXE_RES_STORE: begin
+                    ex_mem_addr_o   <= (reg1_i + {{20{ex_inst[31]}}, ex_inst[31:25], ex_inst[11:7]});
+                end
+                default: begin
+                    ex_mem_addr_o   <= `ZeroWord;
+                end
+            endcase
+        end
+    end
 
     // 相减结果
     wire[31:0]      exe_res_sub = reg1_i - reg2_i;
@@ -148,6 +175,7 @@ module ex(
         end
     end
 
+    // branch 
     always @ (*) begin
         if (rst == `RstEnable) begin
             branch_flag_o   <= `BranchDisable;
@@ -157,7 +185,7 @@ module ex(
                 `EXE_BEQ: begin
                     if (reg1_i == reg2_i) begin
                         branch_flag_o   <= `BranchEnable;
-                        branch_addr_o   <= ex_pc + {20{ex_inst[31]}, ex_inst[7], ex_inst[30:25], ex_inst[11:8], 1'b0};
+                        branch_addr_o   <= ex_pc + {{20{ex_inst[31]}}, ex_inst[7], ex_inst[30:25], ex_inst[11:8], 1'b0};
                     end else begin
                         branch_flag_o   <= `BranchDisable;
                     end
@@ -165,7 +193,7 @@ module ex(
                 `EXE_BNE: begin
                     if (reg1_i != reg2_i) begin
                         branch_flag_o   <= `BranchEnable;
-                        branch_addr_o   <= ex_pc + {20{ex_inst[31]}, ex_inst[7], ex_inst[30:25], ex_inst[11:8], 1'b0};
+                        branch_addr_o   <= ex_pc + {{20{ex_inst[31]}}, ex_inst[7], ex_inst[30:25], ex_inst[11:8], 1'b0};
                     end else begin
                         branch_flag_o   <= `BranchDisable;
                     end
@@ -173,10 +201,10 @@ module ex(
                 `EXE_BLT: begin
                     if (reg1_i[31] != reg2_i[31]) begin
                         branch_flag_o   <= (reg1_i[31] ? `BranchEnable : `BranchDisable);
-                        branch_addr_o   <= ex_pc + {20{ex_inst[31]}, ex_inst[7], ex_inst[30:25], ex_inst[11:8], 1'b0};
+                        branch_addr_o   <= ex_pc + {{20{ex_inst[31]}}, ex_inst[7], ex_inst[30:25], ex_inst[11:8], 1'b0};
                     end else if (reg1_i < reg2_i) begin
                         branch_flag_o   <= `BranchEnable;
-                        branch_addr_o   <= ex_pc + {20{ex_inst[31]}, ex_inst[7], ex_inst[30:25], ex_inst[11:8], 1'b0}; 
+                        branch_addr_o   <= ex_pc + {{20{ex_inst[31]}}, ex_inst[7], ex_inst[30:25], ex_inst[11:8], 1'b0}; 
                     end else begin
                         branch_flag_o   <= `BranchDisable;
                     end
@@ -186,16 +214,16 @@ module ex(
                         branch_flag_o   <= `BranchDisable;
                     end else begin
                         branch_flag_o   <= `BranchEnable;
-                        branch_addr_o   <= ex_pc + {20{ex_inst[31]}, ex_inst[7], ex_inst[30:25], ex_inst[11:8], 1'b0};
+                        branch_addr_o   <= ex_pc + {{20{ex_inst[31]}}, ex_inst[7], ex_inst[30:25], ex_inst[11:8], 1'b0};
                     end
                 end
                 `EXE_BLTU: begin
                     if (reg1_i[31] != reg2_i[31]) begin
                         branch_flag_o   <= (reg1_i[31] ? `BranchDisable : `BranchEnable);
-                        branch_addr_o   <= ex_pc + {20{ex_inst[31]}, ex_inst[7], ex_inst[30:25], ex_inst[11:8], 1'b0};
+                        branch_addr_o   <= ex_pc + {{20{ex_inst[31]}}, ex_inst[7], ex_inst[30:25], ex_inst[11:8], 1'b0};
                     end else if (reg1_i < reg2_i) begin
                         branch_flag_o   <= `BranchEnable;
-                        branch_addr_o   <= ex_pc + {20{ex_inst[31]}, ex_inst[7], ex_inst[30:25], ex_inst[11:8], 1'b0};
+                        branch_addr_o   <= ex_pc + {{20{ex_inst[31]}}, ex_inst[7], ex_inst[30:25], ex_inst[11:8], 1'b0};
                     end else begin
                         branch_flag_o   <= `BranchDisable;
                     end
@@ -205,7 +233,7 @@ module ex(
                         branch_flag_o   <= `BranchDisable;
                     end else begin
                         branch_flag_o   <= `BranchEnable;
-                        branch_addr_o   <= ex_pc + {20{ex_inst[31]}, ex_inst[7], ex_inst[30:25], ex_inst[11:8], 1'b0};
+                        branch_addr_o   <= ex_pc + {{20{ex_inst[31]}}, ex_inst[7], ex_inst[30:25], ex_inst[11:8], 1'b0};
                     end
                 end
                 `EXE_JAL:  begin

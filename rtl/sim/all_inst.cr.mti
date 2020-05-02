@@ -33,20 +33,6 @@ Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  
 Top level modules:
 	id_ex
 
-} {} {}} E:/work/GitHub/bittyCore_RISC-V/rtl/core/bitty_riscv.v {1 {vlog -work work -stats=none E:/work/GitHub/bittyCore_RISC-V/rtl/core/bitty_riscv.v
-Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
--- Compiling module bitty_riscv
-
-Top level modules:
-	bitty_riscv
-
-} {} {}} E:/work/GitHub/bittyCore_RISC-V/rtl/sim/bitty_riscv_sopc_tb.v {1 {vlog -work work -stats=none E:/work/GitHub/bittyCore_RISC-V/rtl/sim/bitty_riscv_sopc_tb.v
-Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
--- Compiling module bitty_riscv_sopc_tb
-
-Top level modules:
-	bitty_riscv_sopc_tb
-
 } {} {}} E:/work/GitHub/bittyCore_RISC-V/rtl/core/ex_mem.v {1 {vlog -work work -stats=none E:/work/GitHub/bittyCore_RISC-V/rtl/core/ex_mem.v
 Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
 -- Compiling module ex_mem
@@ -61,8 +47,19 @@ Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  
 Top level modules:
 	if_id
 
-} {} {}} E:/work/GitHub/bittyCore_RISC-V/rtl/core/bitty_defs.v {1 {vlog -work work -stats=none E:/work/GitHub/bittyCore_RISC-V/rtl/core/bitty_defs.v
+} {} {}} E:/work/GitHub/bittyCore_RISC-V/rtl/sim/bitty_riscv_sopc_tb.v {1 {vlog -work work -stats=none E:/work/GitHub/bittyCore_RISC-V/rtl/sim/bitty_riscv_sopc_tb.v
 Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module bitty_riscv_sopc_tb
+
+Top level modules:
+	bitty_riscv_sopc_tb
+
+} {} {}} E:/work/GitHub/bittyCore_RISC-V/rtl/core/id.v {1 {vlog -work work -stats=none E:/work/GitHub/bittyCore_RISC-V/rtl/core/id.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module id
+
+Top level modules:
+	id
 
 } {} {}} E:/work/GitHub/bittyCore_RISC-V/rtl/core/ex.v {1 {vlog -work work -stats=none E:/work/GitHub/bittyCore_RISC-V/rtl/core/ex.v
 Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
@@ -71,12 +68,8 @@ Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  
 Top level modules:
 	ex
 
-} {} {}} E:/work/GitHub/bittyCore_RISC-V/rtl/core/id.v {1 {vlog -work work -stats=none E:/work/GitHub/bittyCore_RISC-V/rtl/core/id.v
+} {} {}} E:/work/GitHub/bittyCore_RISC-V/rtl/core/bitty_defs.v {1 {vlog -work work -stats=none E:/work/GitHub/bittyCore_RISC-V/rtl/core/bitty_defs.v
 Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
--- Compiling module id
-
-Top level modules:
-	id
 
 } {} {}} E:/work/GitHub/bittyCore_RISC-V/rtl/core/mem.v {1 {vlog -work work -stats=none E:/work/GitHub/bittyCore_RISC-V/rtl/core/mem.v
 Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016

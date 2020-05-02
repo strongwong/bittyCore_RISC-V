@@ -106,6 +106,7 @@ SOFTWARE.
 `define INST_CSRRSI             3'b110          // csrrsi
 `define INST_CSRRCI             3'b111          // csrrci
 
+`define INST_NONE               32'h00000001
 
 //******    执行时对应的指令进行操作相关宏定义  *******//
 //AluOp

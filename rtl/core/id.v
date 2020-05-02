@@ -38,6 +38,7 @@ module id(
     input   wire                    ex_wreg_i,
     input   wire[`RegBus]           ex_wdata_i,
     input   wire[`RegAddrBus]       ex_wd_i,
+    input   wire                    ex_branch_flag_i,
 
     // from wd mem
     input   wire                    mem_wreg_i,
@@ -93,6 +94,15 @@ module id(
             imm_1       <= `ZeroWord;
             imm_2       <= `ZeroWord;
             inst_o      <= `ZeroWord;
+        end else if (ex_branch_flag_i == `BranchEnable && inst_i != `INST_NONE) begin
+            aluop_o     <= `EXE_NONE;
+            alusel_o    <= `EXE_RES_NONE;
+            wreg_o      <= `WriteDisable;
+            instvalid   <= `InstValid;
+            reg1_read_o <= `ReadDisable;
+            reg2_read_o <= `ReadDisable;
+            imm_1       <= `ZeroWord;
+            imm_2       <= `ZeroWord;
         end else begin
             aluop_o     <= `EXE_NONE;
             alusel_o    <= `EXE_RES_NONE;
@@ -442,13 +452,26 @@ module id(
                             instvalid   <= `InstValid;
                         end
                         default: begin
+                            wreg_o      <= `WriteDisable;
+                            wd_o        <= 5'b00000;
+                            reg1_addr_o <= 5'b00000;
+                            reg2_addr_o <= 5'b00000;
                             instvalid   <= `InstInvalid;
                         end
                     endcase
                 end
-                
+                `INST_F_TYPE: begin
+                    wreg_o      <= `WriteDisable;
+                    wd_o        <= 5'b00000;
+                    reg1_addr_o <= 5'b00000;
+                    reg2_addr_o <= 5'b00000;
+                end
                 
                 default: begin
+                    wreg_o      <= `WriteDisable;
+                    wd_o        <= 5'b00000;
+                    reg1_addr_o <= 5'b00000;
+                    reg2_addr_o <= 5'b00000;
                     instvalid   <= `InstInvalid;
                 end
             endcase     // case op
@@ -464,6 +487,8 @@ module id(
     // 确定运算的源操作数 1
     always @ (*) begin
         if (rst == `RstEnable) begin
+            reg1_o  <= `ZeroWord;
+        end else if ((reg1_read_o == 1'b1) && (reg1_addr_o == 5'b00000)) begin
             reg1_o  <= `ZeroWord;
         end else if ((reg1_read_o == 1'b1) && (ex_wreg_i == 1'b1) && (ex_wd_i == reg1_addr_o)) begin
             reg1_o  <= ex_wdata_i;
@@ -486,6 +511,8 @@ module id(
     // 确定运算的源操作数 2
     always @ (*) begin
         if (rst == `RstEnable) begin
+            reg2_o  <= `ZeroWord;
+        end else if ((reg2_read_o == 1'b1) && (reg2_addr_o == 5'b00000)) begin
             reg2_o  <= `ZeroWord;
         end else if ((reg2_read_o == 1'b1) && (ex_wreg_i == 1'b1) && (ex_wd_i == reg2_addr_o)) begin
             reg2_o  <= ex_wdata_i;

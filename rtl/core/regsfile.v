@@ -30,19 +30,19 @@ module regsfile(
     input   wire        rst,
 
     // write port 回写
-    input   wire                we,
-    input   wire[`RegAddrBus]   waddr,
-    input   wire[`RegBus]       wdata,
+    input   wire                we_i,
+    input   wire[`RegAddrBus]   waddr_i,
+    input   wire[`RegBus]       wdata_i,
 
     // read port 1
-    input   wire                re1,
-    input   wire[`RegAddrBus]   raddr1,
-    output  reg[`RegBus]        rdata1,
+    input   wire                re1_i,
+    input   wire[`RegAddrBus]   raddr1_i,
+    output  reg[`RegBus]        rdata1_o,
 
     // read port 2
-    input   wire                re2,
-    input   wire[`RegAddrBus]   raddr2,
-    output  reg[`RegBus]        rdata2
+    input   wire                re2_i,
+    input   wire[`RegAddrBus]   raddr2_i,
+    output  reg[`RegBus]        rdata2_o
 );
 
     // 定义 32 个 32 位寄存器
@@ -51,8 +51,8 @@ module regsfile(
     // write 
     always @ (posedge clk)  begin
         if (rst == `RstDisable) begin
-            if ((we == `WriteEnable) && (waddr != `RegNumLog2'h0)) begin
-                regs[waddr] <= wdata;
+            if ((we_i == `WriteEnable) && (waddr_i != `RegNumLog2'h0)) begin
+                regs[waddr_i] <= wdata_i;
             end 
         end
     end
@@ -60,30 +60,30 @@ module regsfile(
     // read port 1
     always @ (*) begin
         if (rst == `RstEnable) begin
-            rdata1 <= `ZeroWord;
-        end else if (raddr1 == `RegNumLog2'h0) begin
-            rdata1 <= `ZeroWord;
-        end else if ((raddr1 == waddr) && (we == `WriteEnable) && (re1 == `ReadEnable)) begin
-            rdata1 <= wdata;
-        end else if (re1 == `ReadEnable) begin
-            rdata1 <= regs[raddr1];
+            rdata1_o    <= `ZeroWord;
+        end else if (raddr1_i == `RegNumLog2'h0) begin
+            rdata1_o    <= `ZeroWord;
+        end else if ((raddr1_i == waddr_i) && (we_i == `WriteEnable) && (re1_i == `ReadEnable)) begin
+            rdata1_o    <= wdata_i;
+        end else if (re1_i == `ReadEnable) begin
+            rdata1_o    <= regs[raddr1_i];
         end else begin
-            rdata1 <= `ZeroWord;
+            rdata1_o    <= `ZeroWord;
         end
     end
 
     // read port 2
     always @ (*) begin
         if (rst == `RstEnable) begin
-            rdata2 <= `ZeroWord;
-        end else if (raddr2 == `RegNumLog2'h0) begin
-            rdata2 <= `ZeroWord;
-        end else if ((raddr2 == waddr) && (we == `WriteEnable) && (re2 == `ReadEnable)) begin
-            rdata2 <= wdata;
-        end else if (re2 == `ReadEnable) begin
-            rdata2 <= regs[raddr2];
+            rdata2_o    <= `ZeroWord;
+        end else if (raddr2_i == `RegNumLog2'h0) begin
+            rdata2_o    <= `ZeroWord;
+        end else if ((raddr2_i == waddr_i) && (we_i == `WriteEnable) && (re2_i == `ReadEnable)) begin
+            rdata2_o    <= wdata_i;
+        end else if (re2_i == `ReadEnable) begin
+            rdata2_o    <= regs[raddr2_i];
         end else begin
-            rdata2 <= `ZeroWord;
+            rdata2_o    <= `ZeroWord;
         end
     end
 

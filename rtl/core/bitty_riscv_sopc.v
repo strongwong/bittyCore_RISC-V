@@ -31,9 +31,9 @@ module bitty_riscv_sopc(
 );
 
     // 连接指令存储器
-    wire[`InstAddrBus]  inst_addr;
-    wire[`InstBus]      inst;
-    wire                rom_ce;
+    wire[`InstAddrBus]  inst_addr_o;
+    wire[`InstBus]      inst_rom_o;
+    wire                core_ce_o;
 
     // risc-v ram
     wire                mem_ce_i;
@@ -47,9 +47,9 @@ module bitty_riscv_sopc(
     bitty_riscv    u_bitty_riscv(
         .clk(clk),
         .rst(rst),
-        .rom_addr_o(inst_addr),
-        .rom_data_i(inst),
-        .rom_ce_o(rom_ce),
+        .rom_data_i(inst_rom_o),
+        .pc_addr_o(inst_addr_o),
+        .pc_ce_o(core_ce_o),
 
         .ram_data_i(mem_data_o),
         .ram_addr_o(mem_addr_i),
@@ -61,9 +61,9 @@ module bitty_riscv_sopc(
 
     // 例化指令存储器 ROM
     inst_rom    u_inst_rom(
-        .ce(rom_ce),
-        .addr(inst_addr),
-        .inst(inst)
+        .ce_i(core_ce_o),
+        .addr_i(inst_addr_o),
+        .inst_o(inst_rom_o)
     );
 
     // ram data

@@ -210,7 +210,10 @@ module ex(
                     end
                 end
                 `EXE_BGE: begin
-                    if (reg1_i < reg2_i) begin
+                    if (reg1_i[31] != reg2_i[31]) begin
+                        branch_flag_o   <= (reg1_i[31] ? `BranchDisable : `BranchEnable);
+                        branch_addr_o   <= ex_pc + {{20{ex_inst[31]}}, ex_inst[7], ex_inst[30:25], ex_inst[11:8], 1'b0};
+                    end else if (reg1_i < reg2_i) begin
                         branch_flag_o   <= `BranchDisable;
                     end else begin
                         branch_flag_o   <= `BranchEnable;
@@ -229,7 +232,10 @@ module ex(
                     end
                 end
                 `EXE_BGEU: begin
-                    if (reg1_i < reg2_i) begin
+                    if (reg1_i[31] != reg2_i[31]) begin
+                        branch_flag_o   <= (reg1_i[31] ? `BranchEnable : `BranchDisable);
+                        branch_addr_o   <= ex_pc + {{20{ex_inst[31]}}, ex_inst[7], ex_inst[30:25], ex_inst[11:8], 1'b0}; 
+                    end else if (reg1_i < reg2_i) begin
                         branch_flag_o   <= `BranchDisable;
                     end else begin
                         branch_flag_o   <= `BranchEnable;

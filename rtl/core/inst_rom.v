@@ -26,9 +26,9 @@ SOFTWARE.
 `include "bitty_defs.v"
 
 module inst_rom(
-    input   wire                ce,
-    input   wire[`InstAddrBus]  addr,
-    output  reg[`InstBus]       inst 
+    input   wire                ce_i,
+    input   wire[`InstAddrBus]  addr_i,
+    output  reg[`InstBus]       inst_o
 );
 
     // 定义一个数组，大小是 InstMemNum ,元素宽度是 InstBus
@@ -39,10 +39,10 @@ module inst_rom(
 
     // 当复位信号无效时，依据输入的地址，给出指令存储器 ROM 中对应的元素
     always  @ (*) begin
-        if (ce == `ReadDisable) begin
-            inst    <= `ZeroWord;
+        if (ce_i == `ReadDisable) begin
+            inst_o  <= `ZeroWord;
         end else begin
-            inst    <= inst_mem[addr[`InstMemNumLog2+1:2]];
+            inst_o  <= inst_mem[addr_i[`InstMemNumLog2+1:2]];
         end
     end
 

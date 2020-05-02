@@ -31,8 +31,8 @@ module bitty_riscv(
 
     // rom
     input   wire[`RegBus]   rom_data_i,
-    output  wire[`RegBus]   rom_addr_o,
-    output  wire            rom_ce_o,
+    output  wire[`RegBus]   pc_addr_o,
+    output  wire            pc_ce_o,
 
     // ram
     input   wire[`RegBus]   ram_data_i,
@@ -44,9 +44,9 @@ module bitty_riscv(
 );
 
     // 连接 IF/ID 模块与译码阶段 ID 模块的变量
-    wire[`InstAddrBus]      pc;
-    wire[`InstAddrBus]      id_pc_i;
-    wire[`InstBus]          id_inst_i;
+    wire[`InstAddrBus]      pc_pc_o;
+    wire[`InstAddrBus]      if_id_pc_o;
+    wire[`InstBus]          if_id_inst_o;
 
     // 连接译码阶段 ID 模块输出与 ID/EX 模块的输入的变量
     wire[`InstAddrBus]      id_pc_o;
@@ -101,12 +101,12 @@ module bitty_riscv(
     wire[`RegBus]           wb_wdata_i;
 
     // 连接译码阶段 ID 模块与通用寄存器 Regfile 模块的变量
-    wire                    reg1_read;
-    wire                    reg2_read;
-    wire[`RegBus]           reg1_data;
-    wire[`RegBus]           reg2_data;
-    wire[`RegAddrBus]       reg1_addr;
-    wire[`RegAddrBus]       reg2_addr;
+    wire                    id_reg1_read_o;
+    wire                    id_reg2_read_o;
+    wire[`RegAddrBus]       id_reg1_addr_o;
+    wire[`RegAddrBus]       id_reg2_addr_o;
+    wire[`RegBus]           reg1_data_o;
+    wire[`RegBus]           reg2_data_o;
 
     // pc_reg 例化
     pc_reg  u_pc_reg(
@@ -114,36 +114,38 @@ module bitty_riscv(
         .rst(rst),
         .branch_flag_i(ex_branch_flag_o),
         .branch_addr_i(ex_branch_addr_o),
-        .pc(pc),
-        .ce(rom_ce_o)
+        .pc_o(pc_pc_o),
+        .ce_o(pc_ce_o)
     );
 
-    assign  rom_addr_o  =  pc;  // 指令存储器的输入地址就是 pc 的值
+    assign  pc_addr_o  =  pc_pc_o;  // 指令存储器的输入地址就是 pc 的值
 
     // IF/ID 例化
     if_id   u_if_id(
         .clk(clk),
         .rst(rst),
-        .if_pc(pc),
-        .if_inst(rom_data_i),
-        .id_pc(id_pc_i),
-        .id_inst(id_inst_i)
+        .pc_i(pc_pc_o),
+        .inst_i(rom_data_i),
+        .ex_branch_flag_i(ex_branch_flag_o),
+        .pc_o(if_id_pc_o),
+        .inst_o(if_id_inst_o)
     );
 
     // ID 例化
     id  u_id(
         .rst(rst),
-        .pc_i(id_pc_i),
-        .inst_i(id_inst_i),
+        .pc_i(if_id_pc_o),
+        .inst_i(if_id_inst_o),
         
         // regfile 模块的输入
-        .reg1_data_i(reg1_data),
-        .reg2_data_i(reg2_data),
+        .reg1_data_i(reg1_data_o),
+        .reg2_data_i(reg2_data_o),
 
         // from ex
         .ex_wreg_i(ex_wreg_o),
         .ex_wdata_i(ex_wdata_o),
         .ex_wd_i(ex_wd_o),
+        .ex_branch_flag_i(ex_branch_flag_o),
 
         // from wd mem
         .mem_wreg_i(mem_wreg_o),
@@ -151,10 +153,10 @@ module bitty_riscv(
         .mem_wd_i(mem_wd_o),
 
         // 送入 regfile 的信息
-        .reg1_read_o(reg1_read),
-        .reg2_read_o(reg2_read),
-        .reg1_addr_o(reg1_addr),
-        .reg2_addr_o(reg2_addr),
+        .reg1_read_o(id_reg1_read_o),
+        .reg2_read_o(id_reg2_read_o),
+        .reg1_addr_o(id_reg1_addr_o),
+        .reg2_addr_o(id_reg2_addr_o),
 
         // 送到 ID/EX 的信息
         .pc_o(id_pc_o),
@@ -171,16 +173,17 @@ module bitty_riscv(
     regsfile u_regsfile(
         .clk(clk),
         .rst(rst),
-        .we(wb_wreg_i),
-        .waddr(wb_wd_i),
-        .wdata(wb_wdata_i),
-        .re1(reg1_read),
-        .raddr1(reg1_addr),
-        .rdata1(reg1_data),
+        .we_i(wb_wreg_i),
+        .waddr_i(wb_wd_i),
+        .wdata_i(wb_wdata_i),
 
-        .re2(reg2_read),
-        .raddr2(reg2_addr),
-        .rdata2(reg2_data)
+        .re1_i(id_reg1_read_o),
+        .raddr1_i(id_reg1_addr_o),
+        .rdata1_o(reg1_data_o),
+
+        .re2_i(id_reg2_read_o),
+        .raddr2_i(id_reg2_addr_o),
+        .rdata2_o(reg2_data_o)
     );
 
     // ID/EX 例化
@@ -197,6 +200,8 @@ module bitty_riscv(
         .id_reg2(id_reg2_o),
         .id_wd(id_wd_o),
         .id_wreg(id_wreg_o),
+
+        .ex_branch_flag_i(ex_branch_flag_o),
 
         // 传递到执行阶段 EX 模块的信息
         .ex_pc_o(ex_pc_i),

@@ -30,21 +30,26 @@ module if_id(
     input   wire        rst,
 
     // 来自取指阶段的信号
-    input   wire[`InstAddrBus]      if_pc,
-    input   wire[`InstBus]          if_inst,
+    input   wire[`InstAddrBus]      pc_i,
+    input   wire[`InstBus]          inst_i,
+
+    input   wire                    ex_branch_flag_i,
 
     // 对应译码阶段的信号
-    output  reg[`InstAddrBus]       id_pc,
-    output  reg[`InstBus]           id_inst
+    output  reg[`InstAddrBus]       pc_o,
+    output  reg[`InstBus]           inst_o
 );
 
     always @ (posedge clk)  begin
         if (rst == `RstEnable) begin
-            id_pc <= `ZeroWord;
-            id_inst <= `ZeroWord;
+            pc_o    <= `ZeroWord;
+            inst_o  <= `ZeroWord;
+        end else if (ex_branch_flag_i == `BranchEnable) begin
+            pc_o    <= `ZeroWord;
+            inst_o  <= `INST_NONE;
         end else begin
-            id_pc <= if_pc;
-            id_inst <= if_inst;
+            pc_o    <= pc_i;
+            inst_o  <= inst_i;
         end
     end
 

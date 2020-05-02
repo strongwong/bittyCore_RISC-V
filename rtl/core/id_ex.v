@@ -39,6 +39,8 @@ module id_ex(
     input   wire[`RegAddrBus]   id_wd,
     input   wire                id_wreg,
 
+    input   wire                ex_branch_flag_i,
+
     // 传递到执行段的信息
     output  reg[`InstAddrBus]   ex_pc_o,
     output  reg[`InstBus]       ex_inst_o,
@@ -52,6 +54,15 @@ module id_ex(
 
     always @ (posedge clk)  begin
         if (rst == `RstEnable) begin
+            ex_pc_o     <= `ZeroWord;
+            ex_inst_o   <= `ZeroWord;
+            ex_aluop    <= `EXE_NONE;
+            ex_alusel   <= `EXE_RES_NONE;
+            ex_reg1     <= `ZeroWord;
+            ex_reg2     <= `ZeroWord;
+            ex_wd       <= `NOPRegAddr;
+            ex_wreg     <= `WriteDisable;
+        end else if (ex_branch_flag_i == `BranchEnable) begin
             ex_pc_o     <= `ZeroWord;
             ex_inst_o   <= `ZeroWord;
             ex_aluop    <= `EXE_NONE;

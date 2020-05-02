@@ -32,25 +32,25 @@ module pc_reg(
     input       wire                branch_flag_i,
     input       wire[`RegBus]       branch_addr_i,
 
-    output      reg[`InstAddrBus]   pc,
-    output      reg                 ce 
+    output      reg[`InstAddrBus]   pc_o,
+    output      reg                 ce_o 
 );
 
     always  @ (posedge clk) begin
         if (rst == `RstEnable) begin
-            ce  <= `ReadDisable;                // 复位时，读指令使能无效
+            ce_o    <= `ReadDisable;                // 复位时，读指令使能无效
         end else begin
-            ce  <= `ReadEnable;
+            ce_o    <= `ReadEnable;
         end
     end
 
     always  @ (posedge clk) begin
-        if (ce == `ReadDisable) begin
-            pc  <=  `ZeroWord;
+        if (ce_o == `ReadDisable) begin
+            pc_o    <=  `ZeroWord;
         end else if (branch_flag_i == `BranchEnable) begin
-            pc <= branch_addr_i;
+            pc_o    <= branch_addr_i;
         end else begin
-            pc  <= pc + 4'h4;
+            pc_o    <= pc_o + 4'h4;
         end
     end
 

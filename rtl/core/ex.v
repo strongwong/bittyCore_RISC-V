@@ -38,9 +38,6 @@ module ex(
     input   wire[`RegAddrBus]   wd_i,
     input   wire                wreg_i,
 
-    // input   wire[`DataAddrBus]  mem_addr_i,
-    // input   wire[`RegBus]       mem_reg2_i,
-
     // 执行结果 to ex_mem
     output  reg[`RegAddrBus]    wd_o,
     output  reg                 wreg_o,
@@ -55,9 +52,6 @@ module ex(
     output  reg[`RegBus]        branch_addr_o
 );
 
-    // wire[`DataAddrBus]  mem_addr_load;
-    // assign  mem_addr_load  = (reg1_i + {{20{ex_inst[31]}}, ex_inst[31:20]});
-
     // aluop 传递到 访存阶段
     always @ (*) begin
         if (rst == `RstEnable) begin
@@ -67,9 +61,6 @@ module ex(
         end else begin
             ex_aluop_o  <= aluop_i;
             ex_reg2_o   <= reg2_i; 
-            // if (mem_addr_i == mem_addr_load) begin
-            //     ex_reg2_o   <= mem_reg2_i; 
-            // end
             case (alusel_i)
                 `EXE_RES_LOAD: begin
                     ex_mem_addr_o   <= (reg1_i + {{20{ex_inst[31]}}, ex_inst[31:20]});

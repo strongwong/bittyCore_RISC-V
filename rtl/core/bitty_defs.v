@@ -41,6 +41,8 @@ SOFTWARE.
 `define BranchDisable           1'b0
 `define ChipEnable              1'b1
 `define ChipDisable             1'b0
+`define Stop                    1'b1
+`define NoStop                  1'b0
 
 //******    与具体指令相关的宏定义    ******//
 `define INST_I_TYPE             7'b0010011      // I-type 指令

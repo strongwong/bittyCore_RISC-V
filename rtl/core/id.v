@@ -39,6 +39,8 @@ module id(
     input   wire[`RegBus]           ex_wdata_i,
     input   wire[`RegAddrBus]       ex_wd_i,
     input   wire                    ex_branch_flag_i,
+// load 相关
+    input   wire[`AluOpBus]         ex_aluop_i,
 
     // from wd mem
     input   wire                    mem_wreg_i,
@@ -52,6 +54,7 @@ module id(
     output  reg[`RegAddrBus]        reg2_addr_o,
 
     // output execution
+    output  wire                    stallreq,
     output  reg[`InstAddrBus]       pc_o,
     output  reg[`InstBus]           inst_o,
     output  reg[`AluOpBus]          aluop_o,
@@ -78,6 +81,22 @@ module id(
 
     // 指示指令是否有效
     reg     instvalid;
+
+    // load 相关
+    reg     reg1_loadralate;
+    reg     reg2_loadralate;
+    wire    pre_inst_is_load;
+    assign  stallreq = reg1_loadralate | reg2_loadralate;
+    assign pre_inst_is_load = ( (ex_aluop_i == `EXE_LB) ||
+                                (ex_aluop_i == `EXE_LH) ||
+                                (ex_aluop_i == `EXE_LW) ||
+                                (ex_aluop_i == `EXE_LBU)||
+                                (ex_aluop_i == `EXE_LHU)||
+                                (ex_aluop_i == `EXE_SB) ||
+                                (ex_aluop_i == `EXE_SH) ||
+                                (ex_aluop_i == `EXE_SW)) ? 1'b1 : 1'b0;
+
+
 
     //*******   对指令译码    *******//
     always @ (*) begin
@@ -486,8 +505,11 @@ module id(
 
     // 确定运算的源操作数 1
     always @ (*) begin
+            reg1_loadralate <= `NoStop;
         if (rst == `RstEnable) begin
             reg1_o  <= `ZeroWord;
+        end else if (pre_inst_is_load == 1'b1 && ex_wd_i == reg1_addr_o && reg1_read_o == 1'b1) begin
+            reg1_loadralate <= `Stop;          
         end else if ((reg1_read_o == 1'b1) && (reg1_addr_o == 5'b00000)) begin
             reg1_o  <= `ZeroWord;
         end else if ((reg1_read_o == 1'b1) && (ex_wreg_i == 1'b1) && (ex_wd_i == reg1_addr_o)) begin
@@ -510,8 +532,11 @@ module id(
 
     // 确定运算的源操作数 2
     always @ (*) begin
+        reg2_loadralate <= `NoStop;
         if (rst == `RstEnable) begin
             reg2_o  <= `ZeroWord;
+        end else if (pre_inst_is_load == 1'b1 && ex_wd_i == reg2_addr_o && reg2_read_o == 1'b1) begin
+            reg2_loadralate <= `Stop;  
         end else if ((reg2_read_o == 1'b1) && (reg2_addr_o == 5'b00000)) begin
             reg2_o  <= `ZeroWord;
         end else if ((reg2_read_o == 1'b1) && (ex_wreg_i == 1'b1) && (ex_wd_i == reg2_addr_o)) begin

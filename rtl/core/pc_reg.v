@@ -31,6 +31,7 @@ module pc_reg(
 
     input       wire                branch_flag_i,
     input       wire[`RegBus]       branch_addr_i,
+    input       wire[2:0]           stalled,
 
     output      reg[`InstAddrBus]   pc_o,
     output      reg                 ce_o 
@@ -49,7 +50,7 @@ module pc_reg(
             pc_o    <=  `ZeroWord;
         end else if (branch_flag_i == `BranchEnable) begin
             pc_o    <= branch_addr_i;
-        end else begin
+        end else if (stalled[0] == `NoStop) begin
             pc_o    <= pc_o + 4'h4;
         end
     end

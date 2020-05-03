@@ -36,10 +36,16 @@ module data_ram(
     output  reg[`DataBus]       data_o
 );
 
+    // reg[`DataBus]       data_mem[0:`DataMemNum - 1];
     reg[`ByteWidth]     data_mem0[0:`DataMemNum - 1];
     reg[`ByteWidth]     data_mem1[0:`DataMemNum - 1];
     reg[`ByteWidth]     data_mem2[0:`DataMemNum - 1];
     reg[`ByteWidth]     data_mem3[0:`DataMemNum - 1];
+
+    initial $readmemh("inst_data0.data", data_mem0);
+    initial $readmemh("inst_data1.data", data_mem1);
+    initial $readmemh("inst_data2.data", data_mem2);
+    initial $readmemh("inst_data3.data", data_mem3);
 
     // write 
     always @ (posedge clk) begin

@@ -108,12 +108,19 @@ module bitty_riscv(
     wire[`RegBus]           reg1_data_o;
     wire[`RegBus]           reg2_data_o;
 
+    // ctrl
+    wire[2:0]               stall;    
+    wire                    stallreq_from_id;
+
     // pc_reg 例化
     pc_reg  u_pc_reg(
         .clk(clk),
         .rst(rst),
         .branch_flag_i(ex_branch_flag_o),
         .branch_addr_i(ex_branch_addr_o),
+
+        .stalled(stall),
+
         .pc_o(pc_pc_o),
         .ce_o(pc_ce_o)
     );
@@ -127,6 +134,9 @@ module bitty_riscv(
         .pc_i(pc_pc_o),
         .inst_i(rom_data_i),
         .ex_branch_flag_i(ex_branch_flag_o),
+
+        .stalled(stall),
+
         .pc_o(if_id_pc_o),
         .inst_o(if_id_inst_o)
     );
@@ -147,6 +157,8 @@ module bitty_riscv(
         .ex_wd_i(ex_wd_o),
         .ex_branch_flag_i(ex_branch_flag_o),
 
+        .ex_aluop_i(ex_mem_aluop_o),
+
         // from wd mem
         .mem_wreg_i(mem_wreg_o),
         .mem_wdata_i(mem_wdata_o),
@@ -157,6 +169,8 @@ module bitty_riscv(
         .reg2_read_o(id_reg2_read_o),
         .reg1_addr_o(id_reg1_addr_o),
         .reg2_addr_o(id_reg2_addr_o),
+
+        .stallreq(stallreq_from_id),
 
         // 送到 ID/EX 的信息
         .pc_o(id_pc_o),
@@ -202,6 +216,8 @@ module bitty_riscv(
         .id_wreg(id_wreg_o),
 
         .ex_branch_flag_i(ex_branch_flag_o),
+
+        .stalled(stall),
 
         // 传递到执行阶段 EX 模块的信息
         .ex_pc_o(ex_pc_i),
@@ -309,6 +325,14 @@ module bitty_riscv(
         .wb_wd(wb_wd_i),
         .wb_wreg(wb_wreg_i),
         .wb_wdata(wb_wdata_i)
+    );
+
+    // ctrl 
+    ctrl    u_ctrl(
+        .rst(rst),
+        .stallreq_from_id(stallreq_from_id),
+
+        .stalled_o(stall)
     );
 
 endmodule // bitty_riscv

@@ -25,33 +25,21 @@ SOFTWARE.
 
 `include "bitty_defs.v"
 
-module if_id(
-    input   wire        clk,  
+module ctrl(
     input   wire        rst,
+    input   wire        stallreq_from_id,
 
-    // 来自取指阶段的信号
-    input   wire[`InstAddrBus]      pc_i,
-    input   wire[`InstBus]          inst_i,
-
-    input   wire                    ex_branch_flag_i,
-    input   wire[2:0]               stalled,
-
-    // 对应译码阶段的信号
-    output  reg[`InstAddrBus]       pc_o,
-    output  reg[`InstBus]           inst_o
+    output  reg[2:0]         stalled_o
 );
 
-    always @ (posedge clk)  begin
+    always @ (*) begin
         if (rst == `RstEnable) begin
-            pc_o    <= `ZeroWord;
-            inst_o  <= `ZeroWord;
-        end else if (ex_branch_flag_i == `BranchEnable) begin
-            pc_o    <= `ZeroWord;
-            inst_o  <= `INST_NONE;
-        end else if (stalled[0] == `NoStop) begin
-            pc_o    <= pc_i;
-            inst_o  <= inst_i;
+            stalled_o   <= 3'b000;
+        end else if (stallreq_from_id == `Stop) begin
+            stalled_o   <= 3'b001;
+        end else begin
+            stalled_o   <= 3'b000;
         end
     end
 
-endmodule
+endmodule // ctrl

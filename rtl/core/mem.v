@@ -199,7 +199,7 @@ module mem(
                     endcase
                 end
                 `EXE_SW: begin          // sw
-                    mem_sel_o   <= mem_mem_addr_i;
+                    mem_addr_o  <= mem_mem_addr_i;
                     mem_we      <= `WriteEnable;
                     mem_ce_o    <= `ReadEnable;
                     mem_data_o  <= mem_reg2_i;

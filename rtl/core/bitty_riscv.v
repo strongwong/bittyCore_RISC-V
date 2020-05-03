@@ -244,6 +244,10 @@ module bitty_riscv(
         .wd_i(ex_wd_i),
         .wreg_i(ex_wreg_i),
 
+        // from ex_mem
+        // .mem_addr_i(mem_mem_addr_i),
+        // .mem_reg2_i(mem_reg2_i),
+
         // 输出到 ID/MEM 模块的信息
         .wd_o(ex_wd_o),
         .wreg_o(ex_wreg_o),

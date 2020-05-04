@@ -34,9 +34,6 @@ module inst_rom(
     // 定义一个数组，大小是 InstMemNum ,元素宽度是 InstBus
     reg[`InstBus]   inst_mem[0:`InstMemNum-1];
 
-    // 使用文件 inst_rom.data 初始化指令存储器
-    initial $readmemh("inst_rom.data", inst_mem);
-
     // 当复位信号无效时，依据输入的地址，给出指令存储器 ROM 中对应的元素
     always  @ (*) begin
         if (ce_i == `ReadDisable) begin

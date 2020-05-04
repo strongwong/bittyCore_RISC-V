@@ -36,6 +36,21 @@ module  bitty_riscv_sopc_tb();
         forever #10 CLOCK_50    = ~CLOCK_50;
     end 
 
+`ifdef IVERILOG
+    // 使用文件 inst_rom.data 初始化指令存储器
+    initial $readmemh("./rtl/sim/inst_rom.data", u_bitty_riscv_sopc.u_inst_rom.inst_mem);
+    initial $readmemh("./rtl/sim/inst_data0.data", u_bitty_riscv_sopc.u_data_ram.data_mem0);
+    initial $readmemh("./rtl/sim/inst_data1.data", u_bitty_riscv_sopc.u_data_ram.data_mem1);
+    initial $readmemh("./rtl/sim/inst_data2.data", u_bitty_riscv_sopc.u_data_ram.data_mem2);
+    initial $readmemh("./rtl/sim/inst_data3.data", u_bitty_riscv_sopc.u_data_ram.data_mem3);
+`else   // ModelSim 下
+    initial $readmemh("inst_rom.data", u_bitty_riscv_sopc.u_inst_rom.inst_mem);
+    initial $readmemh("inst_data0.data", u_bitty_riscv_sopc.u_data_ram.data_mem0);
+    initial $readmemh("inst_data1.data", u_bitty_riscv_sopc.u_data_ram.data_mem1);
+    initial $readmemh("inst_data2.data", u_bitty_riscv_sopc.u_data_ram.data_mem2);
+    initial $readmemh("inst_data3.data", u_bitty_riscv_sopc.u_data_ram.data_mem3);
+`endif
+
     wire[31:0]  x3  =  u_bitty_riscv_sopc.u_bitty_riscv.u_regsfile.regs[3];
     wire[31:0]  x26 =  u_bitty_riscv_sopc.u_bitty_riscv.u_regsfile.regs[26];
     wire[31:0]  x27 =  u_bitty_riscv_sopc.u_bitty_riscv.u_regsfile.regs[27];
@@ -59,13 +74,21 @@ module  bitty_riscv_sopc_tb();
             $display("********** ######### ***********");
             $display("test fail inst = %2d", x3);       // 第多少条指令出错
         end
+`ifdef IVERILOG
+        $finish;
+`else
         $stop;
+`endif
     end
 
     initial begin
         #100000
         $display("#####--Time out--#####");
+`ifdef IVERILOG
+        $finish;
+`else
         $stop;
+`endif
     end
 
     // 例化最小 sopc

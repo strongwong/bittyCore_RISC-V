@@ -161,14 +161,14 @@ SOFTWARE.
 //******    与指令存储器 ROM 相关的宏定义    ******//
 `define InstAddrBus             31:0            // rom 地址总线宽度
 `define InstBus                 31:0            // rom 数据总线宽度
-`define InstMemNum              65535           // rom 实际大小 64KB
-`define InstMemNumLog2          16             // rom 实际使用地址线宽度
+`define InstMemNum              4096            // rom 实际大小 64KB, iverilog 需要为 4K 仿真
+`define InstMemNumLog2          11              // rom 实际使用地址线宽度，(2^12 - 1 = 4K)
 
 //******                RAM              *******//
 `define DataAddrBus             31:0            // ram addr bus
 `define DataBus                 31:0            // ram data bus
-`define DataMemNum              65535           // ram 64k
-`define DataMemNumLog2          16              // 
+`define DataMemNum              4096            // ram 64k, iverilog 需要为 4K 仿真
+`define DataMemNumLog2          11              // (2^12 - 1 = 4K)
 `define ByteWidth               7:0             // one Byte 8bit
 
 //******    与通用寄存器 regfile 有关宏定义  ******//

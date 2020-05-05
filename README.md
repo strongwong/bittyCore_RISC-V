@@ -4,6 +4,8 @@ bittyCore is a 32-bit RISC-V core written in verilog language, supporting RV32I 
 
 This core has completed the model joint simulation test and passed the RISC-V official RV32I isa instruction set test.
 
+![bittyCore](https://s1.ax1x.com/2020/05/05/YFczdI.png)
+
 **[中文](README_zh.md)**
 
 Description of each directory in the project:

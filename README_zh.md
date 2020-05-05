@@ -4,6 +4,8 @@ bittyCore 是采用 Verilog 语言编写的 32 位 RISC-V 内核，支持 RV32I 
 
 bittyCore 已完成模型联合仿真测试，并通过了 RISC-V 官方 RV32I ISA 指令集测试。
 
+![bittyCore](https://s1.ax1x.com/2020/05/05/YFczdI.png)
+
 **[English](README.md)**
 
 项目目录说明:

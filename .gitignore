@@ -1,2 +1,6 @@
 *.vvp
 *.vcd
+*.wlf
+*.mpf
+*.mpf_new
+*.mti

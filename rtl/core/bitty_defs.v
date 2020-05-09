@@ -157,6 +157,31 @@ SOFTWARE.
 
 `define EXE_RES_NONE            3'b000
 
+//************  define csr registers  ***************//
+`define CSR_MSTATUS             12'h300
+`define CSR_MISA                12'h301
+    `define MISA_RV32           32'h40000000
+    `define MISA_RVI            32'h00000100
+    `define MISA_RVE            32'h00000010
+    `define MISA_RVM            32'h00001000
+    `define MISA_RVA            32'h00000001
+    `define MISA_RVF            32'h00000020
+    `define MISA_RVD            32'h00000008
+    `define MISA_RVC            32'h00000004
+    `define MISA_RVS            32'h00040000
+    `define MISA_RVU            32'h00100000
+
+`define CSR_MIE                 12'h304
+`define CSR_MTVEC               12'h305
+`define CSR_MSCRATCH            12'h340
+`define CSR_MEPC                12'h341
+`define CSR_MCAUSE              12'h342
+`define CSR_MTVAL               12'h343
+`define CSR_MIP                 12'h344
+`define CSR_MCYCLE              12'hc00
+`define CSR_MCYCLEH             12'hc80
+`define CSR_MHARTID             12'hF14
+
 
 //******    与指令存储器 ROM 相关的宏定义    ******//
 `define InstAddrBus             31:0            // rom 地址总线宽度

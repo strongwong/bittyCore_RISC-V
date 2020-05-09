@@ -486,6 +486,10 @@ module id(
                     reg2_addr_o <= 5'b00000;
                 end
                 
+                `INST_CSR_TYPE: begin
+                    
+                end
+
                 default: begin
                     wreg_o      <= `WriteDisable;
                     wd_o        <= 5'b00000;

@@ -9,13 +9,13 @@ z2
 cModel Technology
 dD:/intelFPGA/18.1/modelsim_ase/win32aloem
 vbitty_riscv
-Z0 !s110 1588509167
+Z0 !s110 1588833449
 !i10b 1
-!s100 34<TSYUj^maO=L45:[E`60
-I6m`X51[oTI9=iGIKA`2]e0
+!s100 n;;0_=06I=Qma`NF;5Sbj0
+I:X=V42z9BfePU4<OVI=k42
 Z1 VDg1SIo80bB@j0V0VzS_@n1
 Z2 dE:/work/GitHub/bittyCore_RISC-V/rtl/sim
-w1588509147
+w1588833063
 8E:/work/GitHub/bittyCore_RISC-V/rtl/core/bitty_riscv.v
 FE:/work/GitHub/bittyCore_RISC-V/rtl/core/bitty_riscv.v
 Z3 L0 28
@@ -23,7 +23,7 @@ Z4 OV;L;10.5b;63
 r1
 !s85 0
 31
-Z5 !s108 1588509167.000000
+Z5 !s108 1588833449.000000
 !s107 E:\work\GitHub\bittyCore_RISC-V\rtl\core\bitty_defs.v|E:/work/GitHub/bittyCore_RISC-V/rtl/core/bitty_riscv.v|
 !s90 -reportprogress|300|-work|work|-stats=none|E:/work/GitHub/bittyCore_RISC-V/rtl/core/bitty_riscv.v|
 !i113 1
@@ -51,13 +51,13 @@ R5
 R6
 R7
 vbitty_riscv_sopc_tb
-R0
+!s110 1588833448
 !i10b 1
-!s100 kX@LiWiJRRU_;]_4SNo6_3
-Ig^b[iZkaK^:nXNiflNiA80
+!s100 I`5MGze5lz52cezR=Z;Ni1
+IN?0B09:1jlP=<5b_nG?QV1
 R1
 R2
-w1587718695
+Z8 w1588579897
 8E:/work/GitHub/bittyCore_RISC-V/rtl/sim/bitty_riscv_sopc_tb.v
 FE:/work/GitHub/bittyCore_RISC-V/rtl/sim/bitty_riscv_sopc_tb.v
 R3
@@ -65,7 +65,7 @@ R4
 r1
 !s85 0
 31
-R5
+!s108 1588833448.000000
 !s107 E:/work/GitHub/bittyCore_RISC-V/rtl/sim/bitty_riscv_sopc_tb.v|
 !s90 -reportprogress|300|-work|work|-stats=none|E:/work/GitHub/bittyCore_RISC-V/rtl/sim/bitty_riscv_sopc_tb.v|
 !i113 1
@@ -74,11 +74,11 @@ R7
 vctrl
 R0
 !i10b 1
-!s100 6fm9zG5^JmMJ>K?0c@=C90
-INKDe<>Gi:V?e5Sl@HJQ??2
+!s100 l^bRJ<L:VkBLS[@R9Yj2;3
+I]:f7m45o[CTOPZF9^3[C20
 R1
 R2
-w1588495509
+w1588833443
 8E:/work/GitHub/bittyCore_RISC-V/rtl/core/ctrl.v
 FE:/work/GitHub/bittyCore_RISC-V/rtl/core/ctrl.v
 R3
@@ -95,11 +95,11 @@ R7
 vdata_ram
 R0
 !i10b 1
-!s100 [YnzzecZcOW0@5oPS;?lc2
-IA4iDROYYmM=TiVDDKL<3B2
+!s100 bSHWeKD`@ng]cb4]E=>WO3
+I^jeUAPB4lGN7V6RE5WSV41
 R1
 R2
-w1588421039
+R8
 8E:/work/GitHub/bittyCore_RISC-V/rtl/core/data_ram.v
 FE:/work/GitHub/bittyCore_RISC-V/rtl/core/data_ram.v
 R3
@@ -116,11 +116,11 @@ R7
 vex
 R0
 !i10b 1
-!s100 `Zj9EWBfFh>dQl>MMWdIn0
-II3fV9b4^KY2f_n;L]IJla1
+!s100 aWYDi=d<dIRO54Smc1B?Q3
+IM`nPaP1_gYFWfZ9KWWfI`2
 R1
 R2
-w1588509119
+w1588509419
 8E:/work/GitHub/bittyCore_RISC-V/rtl/core/ex.v
 FE:/work/GitHub/bittyCore_RISC-V/rtl/core/ex.v
 R3
@@ -158,11 +158,11 @@ R7
 vid
 R0
 !i10b 1
-!s100 ZdK0L=6WAzGRJ]8kJiXG73
-IaeSC?_MV2>7KPge;1@Km60
+!s100 of2Jk;CJmXdA:<J;3>hg60
+Id`8CkK[m6NPc6B2MbBYcJ2
 R1
 R2
-w1588496203
+w1588814379
 8E:/work/GitHub/bittyCore_RISC-V/rtl/core/id.v
 FE:/work/GitHub/bittyCore_RISC-V/rtl/core/id.v
 R3
@@ -219,13 +219,13 @@ R5
 R6
 R7
 vinst_rom
-Z8 !s110 1588509168
+R0
 !i10b 1
-!s100 oWH<G@jnNU>G_;SWPiZcB0
-IoGMK2AkCU4cdeR5>0Xa@=1
+!s100 <1bJ4BUdR0L?@>8Sd@fGa0
+ImBR^5g9KAVB2SINT`BI`L3
 R1
 R2
-w1588315426
+R8
 8E:/work/GitHub/bittyCore_RISC-V/rtl/core/inst_rom.v
 FE:/work/GitHub/bittyCore_RISC-V/rtl/core/inst_rom.v
 R3
@@ -240,7 +240,7 @@ R5
 R6
 R7
 vmem
-R8
+R0
 !i10b 1
 !s100 [`6DV[m>Al>jM<=9PHH?G2
 In:YkVzTLzS:jB0inGLK4i1
@@ -254,14 +254,14 @@ R4
 r1
 !s85 0
 31
-Z9 !s108 1588509168.000000
+R5
 !s107 E:\work\GitHub\bittyCore_RISC-V\rtl\core\bitty_defs.v|E:/work/GitHub/bittyCore_RISC-V/rtl/core/mem.v|
 !s90 -reportprogress|300|-work|work|-stats=none|E:/work/GitHub/bittyCore_RISC-V/rtl/core/mem.v|
 !i113 1
 R6
 R7
 vmem_wb
-R8
+Z9 !s110 1588833450
 !i10b 1
 !s100 I^hcgNEH>m:U9MYA^GSK>0
 I;1Ci<:T@_L4@^GA9SF@fC2
@@ -275,14 +275,14 @@ R4
 r1
 !s85 0
 31
-R9
+Z10 !s108 1588833450.000000
 !s107 E:\work\GitHub\bittyCore_RISC-V\rtl\core\bitty_defs.v|E:/work/GitHub/bittyCore_RISC-V/rtl/core/mem_wb.v|
 !s90 -reportprogress|300|-work|work|-stats=none|E:/work/GitHub/bittyCore_RISC-V/rtl/core/mem_wb.v|
 !i113 1
 R6
 R7
 vpc_reg
-R8
+R9
 !i10b 1
 !s100 d2FlIJR:<lWODb2g;L^8A2
 I]5MBUR@TXDU82`[3>BSZP3
@@ -296,14 +296,14 @@ R4
 r1
 !s85 0
 31
-R9
+R10
 !s107 E:\work\GitHub\bittyCore_RISC-V\rtl\core\bitty_defs.v|E:/work/GitHub/bittyCore_RISC-V/rtl/core/pc_reg.v|
 !s90 -reportprogress|300|-work|work|-stats=none|E:/work/GitHub/bittyCore_RISC-V/rtl/core/pc_reg.v|
 !i113 1
 R6
 R7
 vregsfile
-R8
+R9
 !i10b 1
 !s100 5VOIFfB9IH58zEF`_;[D>1
 I:je5DJb3W^D1gDmBlLn820
@@ -317,7 +317,7 @@ R4
 r1
 !s85 0
 31
-R9
+R10
 !s107 E:\work\GitHub\bittyCore_RISC-V\rtl\core\bitty_defs.v|E:/work/GitHub/bittyCore_RISC-V/rtl/core/regsfile.v|
 !s90 -reportprogress|300|-work|work|-stats=none|E:/work/GitHub/bittyCore_RISC-V/rtl/core/regsfile.v|
 !i113 1

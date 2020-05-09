@@ -26,20 +26,34 @@ SOFTWARE.
 `include "bitty_defs.v"
 
 module ctrl(
-    input   wire        rst,
-    input   wire        stallreq_from_id,
+    input   wire                rst,
+    input   wire                stallreq_from_id,
 
-    output  reg[2:0]         stalled_o
+    input   wire                branch_flag_i,
+    input   wire[`InstAddrBus]  branch_addr_i,
+
+    output  reg                 branch_flag_o,
+    output  reg[`InstAddrBus]   branch_addr_o,
+
+    output  reg[2:0]            stalled_o
 );
 
     always @ (*) begin
         if (rst == `RstEnable) begin
-            stalled_o   <= 3'b000;
-        end else if (stallreq_from_id == `Stop) begin
-            stalled_o   <= 3'b001;
+            stalled_o       <= 3'b000;
+            branch_flag_o   <= `BranchDisable;
+            branch_addr_o   <= `ZeroWord;
         end else begin
-            stalled_o   <= 3'b000;
+            branch_flag_o   <= branch_flag_i;
+            branch_addr_o   <= branch_addr_i;
+
+            if (stallreq_from_id == `Stop) begin
+                stalled_o   <= 3'b001;
+            end else begin
+                stalled_o   <= 3'b000;
+            end            
         end
+
     end
 
 endmodule // ctrl

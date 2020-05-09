@@ -77,9 +77,12 @@ module bitty_riscv(
     wire[`DataAddrBus]      ex_addr_o;
     wire[`RegBus]           ex_mem_reg2_o;
 
-    // ex to pc_reg
+    // ex to ctrl
     wire                    ex_branch_flag_o;
     wire[`RegBus]           ex_branch_addr_o;
+
+    wire                    ctrl_branch_flag_o;
+    wire[`RegBus]           ctrl_branch_addr_o;
 
     // 连接 EX/MEM 模块的输出与访存阶段 MEM 模块的输入的变量
     wire                    mem_wreg_i;
@@ -116,8 +119,8 @@ module bitty_riscv(
     pc_reg  u_pc_reg(
         .clk(clk),
         .rst(rst),
-        .branch_flag_i(ex_branch_flag_o),
-        .branch_addr_i(ex_branch_addr_o),
+        .branch_flag_i(ctrl_branch_flag_o),
+        .branch_addr_i(ctrl_branch_addr_o),
 
         .stalled(stall),
 
@@ -133,7 +136,7 @@ module bitty_riscv(
         .rst(rst),
         .pc_i(pc_pc_o),
         .inst_i(rom_data_i),
-        .ex_branch_flag_i(ex_branch_flag_o),
+        .ex_branch_flag_i(ctrl_branch_flag_o),
 
         .stalled(stall),
 
@@ -215,7 +218,7 @@ module bitty_riscv(
         .id_wd(id_wd_o),
         .id_wreg(id_wreg_o),
 
-        .ex_branch_flag_i(ex_branch_flag_o),
+        .ex_branch_flag_i(ctrl_branch_flag_o),
 
         .stalled(stall),
 
@@ -253,7 +256,7 @@ module bitty_riscv(
         .ex_mem_addr_o(ex_addr_o),
         .ex_reg2_o(ex_mem_reg2_o),
 
-        // ex to pc_reg
+        // ex to ctrl
         .branch_flag_o(ex_branch_flag_o),
         .branch_addr_o(ex_branch_addr_o)
     );
@@ -331,6 +334,13 @@ module bitty_riscv(
     ctrl    u_ctrl(
         .rst(rst),
         .stallreq_from_id(stallreq_from_id),
+        
+        .branch_flag_i(ex_branch_flag_o),
+        .branch_addr_i(ex_branch_addr_o),
+
+        // ctrl to pc_reg
+        .branch_flag_o(ctrl_branch_flag_o),
+        .branch_addr_o(ctrl_branch_addr_o),
 
         .stalled_o(stall)
     );

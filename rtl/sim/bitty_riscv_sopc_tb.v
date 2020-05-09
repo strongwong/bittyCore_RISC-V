@@ -91,6 +91,14 @@ module  bitty_riscv_sopc_tb();
 `endif
     end
 
+`ifdef IVERILOG
+    initial begin
+        $display("#####-- Dump start --#####");
+        $dumpfile("./rtl/sim/bitty_riscv_sopc_tb.vcd");
+        $dumpvars;
+
+    end
+`endif
     // 例化最小 sopc
     bitty_riscv_sopc   u_bitty_riscv_sopc(
         .clk(CLOCK_50),

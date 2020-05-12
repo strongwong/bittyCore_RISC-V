@@ -38,6 +38,9 @@ module id_ex(
     input   wire[`RegBus]       id_reg2,
     input   wire[`RegAddrBus]   id_wd,
     input   wire                id_wreg,
+    input   wire                id_wcsr_reg,
+    input   wire[`RegBus]       id_csr_reg,
+    input   wire[`RegAddrBus]   id_wd_csr_reg,
 
     input   wire                ex_branch_flag_i,
     
@@ -51,36 +54,49 @@ module id_ex(
     output  reg[`RegBus]        ex_reg1,
     output  reg[`RegBus]        ex_reg2,
     output  reg[`RegAddrBus]    ex_wd,
-    output  reg                 ex_wreg
+    output  reg                 ex_wreg,
+    output  reg                 ex_wcsr_reg,
+    output  reg[`RegBus]        ex_csr_reg,
+    output  reg[`RegAddrBus]    ex_wd_csr_reg
 );
 
     always @ (posedge clk)  begin
         if (rst == `RstEnable) begin
-            ex_pc_o     <= `ZeroWord;
-            ex_inst_o   <= `ZeroWord;
-            ex_aluop    <= `EXE_NONE;
-            ex_alusel   <= `EXE_RES_NONE;
-            ex_reg1     <= `ZeroWord;
-            ex_reg2     <= `ZeroWord;
-            ex_wd       <= `NOPRegAddr;
-            ex_wreg     <= `WriteDisable;
+            ex_pc_o         <= `ZeroWord;
+            ex_inst_o       <= `ZeroWord;
+            ex_aluop        <= `EXE_NONE;
+            ex_alusel       <= `EXE_RES_NONE;
+            ex_reg1         <= `ZeroWord;
+            ex_reg2         <= `ZeroWord;
+            ex_wd           <= `NOPRegAddr;
+            ex_wreg         <= `WriteDisable;
+            ex_wcsr_reg     <= `WriteDisable;
+            ex_csr_reg      <= `ZeroWord;
+            ex_wd_csr_reg   <= `ZeroWord;
         end else if ((ex_branch_flag_i == `BranchEnable) || (stalled[0] == `Stop)) begin
-            ex_inst_o   <= `ZeroWord;
-            ex_aluop    <= `EXE_NONE;
-            ex_alusel   <= `EXE_RES_NONE;
-            ex_reg1     <= `ZeroWord;
-            ex_reg2     <= `ZeroWord;
-            ex_wd       <= `NOPRegAddr;
-            ex_wreg     <= `WriteDisable;
+            ex_inst_o       <= `ZeroWord;
+            ex_pc_o         <= id_pc_i;
+            ex_aluop        <= `EXE_NONE;
+            ex_alusel       <= `EXE_RES_NONE;
+            ex_reg1         <= `ZeroWord;
+            ex_reg2         <= `ZeroWord;
+            ex_wd           <= `NOPRegAddr;
+            ex_wreg         <= `WriteDisable;
+            ex_wcsr_reg     <= `WriteDisable;
+            ex_csr_reg      <= `ZeroWord;
+            ex_wd_csr_reg   <= `ZeroWord;
         end else begin
-            ex_pc_o     <= id_pc_i;
-            ex_inst_o   <= id_inst_i;
-            ex_aluop    <= id_aluop;
-            ex_alusel   <= id_alusel;
-            ex_reg1     <= id_reg1;
-            ex_reg2     <= id_reg2;
-            ex_wd       <= id_wd;
-            ex_wreg     <= id_wreg;
+            ex_pc_o         <= id_pc_i;
+            ex_inst_o       <= id_inst_i;
+            ex_aluop        <= id_aluop;
+            ex_alusel       <= id_alusel;
+            ex_reg1         <= id_reg1;
+            ex_reg2         <= id_reg2;
+            ex_wd           <= id_wd;
+            ex_wreg         <= id_wreg;
+            ex_wcsr_reg     <= id_wcsr_reg;
+            ex_csr_reg      <= id_csr_reg;
+            ex_wd_csr_reg   <= id_wd_csr_reg;
         end
     end
 

@@ -37,6 +37,9 @@ module ex(
     input   wire[`RegBus]       reg2_i,
     input   wire[`RegAddrBus]   wd_i,
     input   wire                wreg_i,
+    input   wire                wcsr_reg_i,
+    input   wire[`RegBus]       csr_reg_i,
+    input   wire[`RegAddrBus]   wd_csr_reg_i,
 
     // 执行结果 to ex_mem
     output  reg[`RegAddrBus]    wd_o,
@@ -47,7 +50,12 @@ module ex(
     output  reg[`DataAddrBus]   ex_mem_addr_o,
     output  reg[`RegBus]        ex_reg2_o,
 
-    // output  pc_reg
+    // output to csr_reg
+    output  reg                 wcsr_reg_o,         // write csr enable
+    output  reg[`RegAddrBus]    wd_csr_reg_o,
+    output  reg[`RegBus]        wcsr_data_o,   
+
+    // output  pc_reg / ctrl
     output  reg                 branch_flag_o,
     output  reg[`RegBus]        branch_addr_o
 );
@@ -260,6 +268,31 @@ module ex(
         end
     end
 
+    // csrr
+    assign wd_csr_reg_o = wd_csr_reg_i;
+
+    always @ (*) begin
+        if (rst == `RstEnable) begin
+            wcsr_data_o <= `ZeroWord;
+        end else begin
+            case (aluop_i)
+                `EXE_CSRRW: begin
+                    wcsr_data_o <= reg1_i;
+                end
+                `EXE_CSRRS: begin
+                    wcsr_data_o <= csr_reg_i | reg1_i;
+                end
+                `EXE_CSRRC: begin
+                    wcsr_data_o <= csr_reg_i & (~reg1_i);
+                end
+                default: begin
+                    wcsr_data_o <= `ZeroWord;
+                end
+            endcase
+        end
+    end
+
+
     // 2. 根据 alusel_i 指示的运算类型，选择一个运算结果作为最终结果
     always @ (*) begin
         wd_o    <= wd_i;    // wd_o 等于 wd_i, 要写的目的寄存器地址
@@ -279,6 +312,9 @@ module ex(
             end
             `EXE_RES_BRANCH: begin
                 wdata_o <= branchres;
+            end
+            `EXE_RES_CSR   : begin
+                wdata_o <= csr_reg_i;
             end
             default:    begin
                 wdata_o <= `ZeroWord;

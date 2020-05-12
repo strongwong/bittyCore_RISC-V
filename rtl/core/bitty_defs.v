@@ -146,20 +146,27 @@ SOFTWARE.
 `define EXE_SH                  5'b11010
 `define EXE_SW                  5'b11011
 
-//AluSel
-`define EXE_RES_LOGIC           3'b001
-`define EXE_RES_SHIFT           3'b010
-`define EXE_RES_ARITH           3'b011
-`define EXE_RES_COMPARE         3'b100
-`define EXE_RES_LOAD            3'b101
-`define EXE_RES_STORE           3'b110
-`define EXE_RES_BRANCH          3'b111
+`define EXE_CSRRW               5'b11100    // csrrw\csrrwi
+`define EXE_CSRRS               5'b11101    // csrrs\csrrsi
+`define EXE_CSRRC               5'b11110    // csrrc\csrrci
 
-`define EXE_RES_NONE            3'b000
+//AluSel
+`define EXE_RES_LOGIC           4'b0001
+`define EXE_RES_SHIFT           4'b0010
+`define EXE_RES_ARITH           4'b0011
+`define EXE_RES_COMPARE         4'b0100
+`define EXE_RES_LOAD            4'b0101
+`define EXE_RES_STORE           4'b0110
+`define EXE_RES_BRANCH          4'b0111
+`define EXE_RES_CSR             4'b1000
+
+`define EXE_RES_NONE            4'b0000
 
 //************  define csr registers  ***************//
 `define CSR_MSTATUS             12'h300
+`define CSR_MSTATUS_MASK        32'hFFFFFFFF
 `define CSR_MISA                12'h301
+`define CSR_MISA_MASK           32'hFFFFFFFF
     `define MISA_RV32           32'h40000000
     `define MISA_RVI            32'h00000100
     `define MISA_RVE            32'h00000010
@@ -172,15 +179,25 @@ SOFTWARE.
     `define MISA_RVU            32'h00100000
 
 `define CSR_MIE                 12'h304
+//`define CSR_MIE_MASK            `IRQ_MASK
 `define CSR_MTVEC               12'h305
+`define CSR_MTVEC_MASK          32'hFFFFFFFF
 `define CSR_MSCRATCH            12'h340
+`define CSR_MSCRATCH_MASK       32'hFFFFFFFF
 `define CSR_MEPC                12'h341
+`define CSR_MEPC_MASK           32'hFFFFFFFF
 `define CSR_MCAUSE              12'h342
+`define CSR_MCAUSE_MASK         32'h8000000F
 `define CSR_MTVAL               12'h343
+`define CSR_MTVAL_MASK          32'hFFFFFFFF
 `define CSR_MIP                 12'h344
+//`define CSR_MIE_MASK            `IRQ_MASK
 `define CSR_MCYCLE              12'hc00
+`define CSR_MCYCLE_MASK         32'hFFFFFFFF
 `define CSR_MCYCLEH             12'hc80
+`define CSR_MCYCLEH_MASK        32'hFFFFFFFF
 `define CSR_MHARTID             12'hF14
+`define CSR_MHARTID_MASK        32'hFFFFFFFF
 
 
 //******    与指令存储器 ROM 相关的宏定义    ******//

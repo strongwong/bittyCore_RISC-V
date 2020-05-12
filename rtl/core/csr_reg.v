@@ -50,7 +50,7 @@ module csr_reg(
     reg[`RegBus]                csr_mtval;
     reg[`RegBus]                csr_mip;
     reg[`DoubleRegBus]          csr_mcycle;       // user
-    reg[`RegBus]                csr_mcycleh;
+//    reg[`RegBus]                csr_mcycleh;
     reg[`RegBus]                csr_mhartid;
 
 
@@ -74,17 +74,87 @@ module csr_reg(
             csr_mcause      <= `ZeroWord;
             csr_mtval       <= `ZeroWord;
             csr_mip         <= `ZeroWord;
+            csr_mhartid     <= `ZeroWord;
         end else begin
-            
+            if (we_i == `WriteEnable) begin
+                case (waddr_i[11:0])
+                    `CSR_MSTATUS: begin
+                        csr_mstatus <= wdata_i & `CSR_MSTATUS_MASK;
+                    end
+                    `CSR_MIE: begin
+                        csr_mie <= wdata_i ;
+                    end
+                    `CSR_MTVEC: begin
+                        csr_mtvec <= wdata_i & `CSR_MTVEC_MASK;
+                    end
+                    `CSR_MSCRATCH: begin
+                        csr_mscratch <= wdata_i & `CSR_MSCRATCH_MASK;
+                    end
+                    `CSR_MEPC: begin
+                        csr_mepc    <= wdata_i & `CSR_MEPC_MASK;
+                    end
+                    `CSR_MCAUSE: begin
+                        csr_mcause <= wdata_i & `CSR_MCAUSE_MASK;
+                    end
+                    `CSR_MTVAL: begin
+                        csr_mtval <= wdata_i & `CSR_MTVAL_MASK;
+                    end
+                    `CSR_MIP: begin
+                        csr_mip <= wdata_i;
+                    end
+                    default: begin
+                        
+                    end
+                endcase
+            end else begin
+                
+            end
         end
     end
 
     // read regs
     always @ (posedge clk) begin
         if (rst == `RstEnable) begin
-            
+            rdata_o <= `ZeroWord;
         end else begin
-            
+            case (raddr_i[11:0])
+                `CSR_MSTATUS: begin
+                    rdata_o <= csr_mstatus & `CSR_MSTATUS_MASK;
+                end 
+                `CSR_MSCRATCH: begin
+                    rdata_o <= csr_mscratch & `CSR_MSCRATCH_MASK;
+                end
+                `CSR_MEPC: begin
+                    rdata_o <= csr_mepc & `CSR_MEPC_MASK;
+                end
+                `CSR_MTVEC: begin
+                    rdata_o <= csr_mtvec & `CSR_MTVEC_MASK;
+                end
+                `CSR_MTVAL: begin
+                    rdata_o <= csr_mtval & `CSR_MTVAL_MASK;
+                end
+                `CSR_MCAUSE: begin
+                    rdata_o <= csr_mcause & `CSR_MCAUSE_MASK;
+                end
+                `CSR_MIP: begin
+                    rdata_o <= csr_mip ;
+                end
+                `CSR_MIE: begin
+                    rdata_o <= csr_mie;
+                end
+                `CSR_MCYCLE: begin
+                    rdata_o <= csr_mcycle[31:0];
+                end
+                `CSR_MCYCLEH: begin
+                    rdata_o <= csr_mcycle[63:32];
+                end
+                `CSR_MHARTID: begin
+                    rdata_o <= csr_mhartid;
+                end
+                default: begin
+                    rdata_o <= `ZeroWord;
+                end
+            endcase
         end
     end
 

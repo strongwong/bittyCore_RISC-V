@@ -47,6 +47,12 @@ module id(
     input   wire[`RegBus]           mem_wdata_i,
     input   wire[`RegAddrBus]       mem_wd_i,
 
+    // from csr
+    input   wire[`RegBus]           csr_reg_data_i,
+
+    // to csr reg
+    output  reg[`RegAddrBus]        csr_reg_addr_o,
+
     // output to regfile
     output  reg                     reg1_read_o,
     output  reg                     reg2_read_o,
@@ -62,7 +68,10 @@ module id(
     output  reg[`RegBus]            reg1_o,
     output  reg[`RegBus]            reg2_o,
     output  reg[`RegAddrBus]        wd_o,
-    output  reg                     wreg_o
+    output  reg                     wreg_o,
+    output  reg                     wcsr_reg_o,
+    output  reg[`RegBus]            csr_reg_o,
+    output  reg[`RegAddrBus]        wd_csr_reg_o
 );
 
     // 取得指令的指令码，功能码
@@ -101,41 +110,49 @@ module id(
     //*******   对指令译码    *******//
     always @ (*) begin
         if (rst == `RstEnable) begin
-            aluop_o     <= `EXE_NONE;
-            alusel_o    <= `EXE_RES_NONE;
-            wd_o        <= `NOPRegAddr;
-            wreg_o      <= `WriteDisable;
-            instvalid   <= `InstValid;
-            reg1_read_o <= `ReadDisable;
-            reg2_read_o <= `ReadDisable;
-            reg1_addr_o <= `NOPRegAddr;
-            reg2_addr_o <= `NOPRegAddr;
-            imm_1       <= `ZeroWord;
-            imm_2       <= `ZeroWord;
-            inst_o      <= `ZeroWord;
+            aluop_o         <= `EXE_NONE;
+            alusel_o        <= `EXE_RES_NONE;
+            wd_o            <= `NOPRegAddr;
+            wreg_o          <= `WriteDisable;
+            instvalid       <= `InstValid;
+            reg1_read_o     <= `ReadDisable;
+            reg2_read_o     <= `ReadDisable;
+            reg1_addr_o     <= `NOPRegAddr;
+            reg2_addr_o     <= `NOPRegAddr;
+            imm_1           <= `ZeroWord;
+            imm_2           <= `ZeroWord;
+            inst_o          <= `ZeroWord;
+            csr_reg_addr_o  <= `ZeroWord;
+            csr_reg_o       <= `ZeroWord;
+            wd_csr_reg_o    <= `ZeroWord;
+            wcsr_reg_o      <= `WriteDisable;
         end else if (ex_branch_flag_i == `BranchEnable && inst_i != `INST_NONE) begin
-            aluop_o     <= `EXE_NONE;
-            alusel_o    <= `EXE_RES_NONE;
-            wreg_o      <= `WriteDisable;
-            instvalid   <= `InstValid;
-            reg1_read_o <= `ReadDisable;
-            reg2_read_o <= `ReadDisable;
-            imm_1       <= `ZeroWord;
-            imm_2       <= `ZeroWord;
+            aluop_o         <= `EXE_NONE;
+            alusel_o        <= `EXE_RES_NONE;
+            wreg_o          <= `WriteDisable;
+            instvalid       <= `InstValid;
+            reg1_read_o     <= `ReadDisable;
+            reg2_read_o     <= `ReadDisable;
+            imm_1           <= `ZeroWord;
+            imm_2           <= `ZeroWord;
         end else begin
-            aluop_o     <= `EXE_NONE;
-            alusel_o    <= `EXE_RES_NONE;
-            wd_o        <= rd;
-            wreg_o      <= `WriteDisable;
-            instvalid   <= `InstInvalid;
-            reg1_read_o <= `ReadDisable;
-            reg2_read_o <= `ReadDisable;
-            reg1_addr_o <= rs1;
-            reg2_addr_o <= rs2;
-            imm_1       <= `ZeroWord;
-            imm_2       <= `ZeroWord;
-            inst_o      <= inst_i;
-            pc_o        <= pc_i;
+            aluop_o         <= `EXE_NONE;
+            alusel_o        <= `EXE_RES_NONE;
+            wd_o            <= rd;
+            wreg_o          <= `WriteDisable;
+            instvalid       <= `InstInvalid;
+            reg1_read_o     <= `ReadDisable;
+            reg2_read_o     <= `ReadDisable;
+            reg1_addr_o     <= rs1;
+            reg2_addr_o     <= rs2;
+            imm_1           <= `ZeroWord;
+            imm_2           <= `ZeroWord;
+            inst_o          <= inst_i;
+            pc_o            <= pc_i;
+            wcsr_reg_o      <= `WriteDisable;
+            csr_reg_o       <= csr_reg_data_i;
+            wd_csr_reg_o    <= `ZeroWord;
+            csr_reg_addr_o  <= `ZeroWord;
 
             case (opcode)
                 `INST_LUI   : begin     // lui
@@ -472,29 +489,114 @@ module id(
                         end
                         default: begin
                             wreg_o      <= `WriteDisable;
-                            wd_o        <= 5'b00000;
-                            reg1_addr_o <= 5'b00000;
-                            reg2_addr_o <= 5'b00000;
+                            wd_o        <= `NOPRegAddr;
+                            reg1_addr_o <= `NOPRegAddr;
+                            reg2_addr_o <= `NOPRegAddr;
                             instvalid   <= `InstInvalid;
                         end
                     endcase
                 end
                 `INST_F_TYPE: begin
                     wreg_o      <= `WriteDisable;
-                    wd_o        <= 5'b00000;
-                    reg1_addr_o <= 5'b00000;
-                    reg2_addr_o <= 5'b00000;
+                    wd_o        <= `NOPRegAddr;
+                    reg1_addr_o <= `NOPRegAddr;
+                    reg2_addr_o <= `NOPRegAddr;
                 end
                 
                 `INST_CSR_TYPE: begin
-                    
+                    case (funct3) 
+                        `INST_CSRRW: begin
+                            aluop_o         <= `EXE_CSRRW;
+                            alusel_o        <= `EXE_RES_CSR;
+                            wreg_o          <= `WriteEnable;
+                            wd_o            <= rd;
+                            reg1_read_o     <= `ReadEnable;
+                            reg2_read_o     <= `ReadDisable;
+                            wcsr_reg_o      <= `WriteEnable;
+                            csr_reg_addr_o  <= {20'h0, inst_i[31:20]};
+                            wd_csr_reg_o    <= {20'h0, inst_i[31:20]};
+                            instvalid   <= `InstValid;
+                        end
+                        `INST_CSRRS: begin
+                            aluop_o         <= `EXE_CSRRS;
+                            alusel_o        <= `EXE_RES_CSR;
+                            wreg_o          <= `WriteEnable;
+                            wd_o            <= rd;
+                            reg1_read_o     <= `ReadEnable;
+                            reg2_read_o     <= `ReadDisable;
+                            wcsr_reg_o      <= `WriteEnable;
+                            csr_reg_addr_o  <= {20'h0, inst_i[31:20]};
+                            wd_csr_reg_o    <= {20'h0, inst_i[31:20]};
+                            instvalid   <= `InstValid;
+                        end
+                        `INST_CSRRC: begin
+                            aluop_o         <= `EXE_CSRRC;
+                            alusel_o        <= `EXE_RES_CSR;
+                            wreg_o          <= `WriteEnable;
+                            wd_o            <= rd;
+                            reg1_read_o     <= `ReadEnable;
+                            reg2_read_o     <= `ReadDisable;
+                            wcsr_reg_o      <= `WriteEnable;
+                            csr_reg_addr_o  <= {20'h0, inst_i[31:20]};
+                            wd_csr_reg_o    <= {20'h0, inst_i[31:20]};
+                            instvalid   <= `InstValid;
+                        end
+                        `INST_CSRRWI: begin
+                            aluop_o         <= `EXE_CSRRW;
+                            alusel_o        <= `EXE_RES_CSR;
+                            wreg_o          <= `WriteEnable;
+                            wd_o            <= rd;
+                            reg1_read_o     <= `ReadDisable;
+                            reg2_read_o     <= `ReadDisable;
+                            wcsr_reg_o      <= `WriteEnable;
+                            csr_reg_addr_o  <= {20'h0, inst_i[31:20]};
+                            wd_csr_reg_o    <= {20'h0, inst_i[31:20]};
+                            imm_1           <= {27'h0, inst_i[19:15]};
+                            instvalid   <= `InstValid;
+                        end
+                        `INST_CSRRSI: begin
+                            aluop_o         <= `EXE_CSRRS;
+                            alusel_o        <= `EXE_RES_CSR;
+                            wreg_o          <= `WriteEnable;
+                            wd_o            <= rd;
+                            reg1_read_o     <= `ReadDisable;
+                            reg2_read_o     <= `ReadDisable;
+                            wcsr_reg_o      <= `WriteEnable;
+                            csr_reg_addr_o  <= {20'h0, inst_i[31:20]};
+                            wd_csr_reg_o    <= {20'h0, inst_i[31:20]};
+                            imm_1           <= {27'h0, inst_i[19:15]};
+                            instvalid   <= `InstValid;
+                        end
+                        `INST_CSRRCI: begin
+                            aluop_o         <= `EXE_CSRRC;
+                            alusel_o        <= `EXE_RES_CSR;
+                            wreg_o          <= `WriteEnable;
+                            wd_o            <= rd;
+                            reg1_read_o     <= `ReadDisable;
+                            reg2_read_o     <= `ReadDisable;
+                            wcsr_reg_o      <= `WriteEnable;
+                            csr_reg_addr_o  <= {20'h0, inst_i[31:20]};
+                            wd_csr_reg_o    <= {20'h0, inst_i[31:20]};
+                            imm_1           <= {27'h0, inst_i[19:15]};
+                            instvalid   <= `InstValid;
+                        end
+                        default: begin
+                            wreg_o          <= `WriteDisable;
+                            wcsr_reg_o      <= `WriteDisable;
+                            wd_o            <= `NOPRegAddr;
+                            csr_reg_addr_o  <= `ZeroWord;
+                            wd_csr_reg_o    <= `ZeroWord;
+                            reg1_addr_o     <= `NOPRegAddr;
+                            reg2_addr_o     <= `NOPRegAddr;
+                        end
+                    endcase     // case csr funct3
                 end
 
                 default: begin
                     wreg_o      <= `WriteDisable;
-                    wd_o        <= 5'b00000;
-                    reg1_addr_o <= 5'b00000;
-                    reg2_addr_o <= 5'b00000;
+                    wd_o        <= `NOPRegAddr;
+                    reg1_addr_o <= `NOPRegAddr;
+                    reg2_addr_o <= `NOPRegAddr;
                     instvalid   <= `InstInvalid;
                 end
             endcase     // case op

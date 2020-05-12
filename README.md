@@ -14,6 +14,9 @@ Description of each directory in the project:
 ├─rtl           
 │  ├─core       # bittyCore verilog source code
 │  └─sim        # Simulation top-level files and directories
+├─tests
+|  └─example
+|      └─simple # Simple test project code
 └─tools         # Simulation script files and filelist under Windows and Linux
 ```
 

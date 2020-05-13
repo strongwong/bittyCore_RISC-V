@@ -59,7 +59,7 @@ module bitty_riscv(
     wire[`RegAddrBus]       id_wd_o;
     wire                    id_wcsr_reg_o;
     wire[`RegBus]           id_csr_reg_o;
-    wire[`RegAddrBus]       id_wd_csr_reg_o;
+    wire[`DataAddrBus]      id_wd_csr_reg_o;
 
     // 连接 ID/EX 模块输出与执行阶段 EX 模块的输入变量
     wire[`InstAddrBus]      ex_pc_i;
@@ -72,7 +72,7 @@ module bitty_riscv(
     wire[`RegAddrBus]       ex_wd_i;
     wire                    ex_wcsr_reg_i;
     wire[`RegBus]           ex_csr_reg_i;
-    wire[`RegAddrBus]       ex_wd_csr_reg_i;
+    wire[`DataAddrBus]      ex_wd_csr_reg_i;
 
     // 连接执行阶段 EX 模块的输出与 EX/MEM 模块的输入变量
     wire                    ex_wreg_o;

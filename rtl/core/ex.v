@@ -269,6 +269,7 @@ module ex(
     end
 
     // csrr
+	assign wcsr_reg_o = wcsr_reg_i;    
     assign wd_csr_reg_o = wd_csr_reg_i;
 
     always @ (*) begin

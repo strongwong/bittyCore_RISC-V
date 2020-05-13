@@ -32,7 +32,7 @@ SOFTWARE.
 `define ReadEnable              1'b1
 `define ReadDisable             1'b0
 `define AluOpBus                4:0             //译码阶段的输出 aluop_o 宽度
-`define AluSelBus               2:0             //译码阶段的输出 alusel_o 宽度
+`define AluSelBus               3:0             //译码阶段的输出 alusel_o 宽度
 `define InstValid               1'b1
 `define InstInvalid             1'b0
 `define True_v                  1'b1

@@ -51,7 +51,7 @@ module id(
     input   wire[`RegBus]           csr_reg_data_i,
 
     // to csr reg
-    output  reg[`RegAddrBus]        csr_reg_addr_o,
+    output  reg[`DataAddrBus]       csr_reg_addr_o,
 
     // output to regfile
     output  reg                     reg1_read_o,
@@ -71,7 +71,7 @@ module id(
     output  reg                     wreg_o,
     output  reg                     wcsr_reg_o,
     output  reg[`RegBus]            csr_reg_o,
-    output  reg[`RegAddrBus]        wd_csr_reg_o
+    output  reg[`DataAddrBus]       wd_csr_reg_o
 );
 
     // 取得指令的指令码，功能码

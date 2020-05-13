@@ -40,7 +40,7 @@ module id_ex(
     input   wire                id_wreg,
     input   wire                id_wcsr_reg,
     input   wire[`RegBus]       id_csr_reg,
-    input   wire[`RegAddrBus]   id_wd_csr_reg,
+    input   wire[`DataAddrBus]  id_wd_csr_reg,
 
     input   wire                ex_branch_flag_i,
     
@@ -57,7 +57,7 @@ module id_ex(
     output  reg                 ex_wreg,
     output  reg                 ex_wcsr_reg,
     output  reg[`RegBus]        ex_csr_reg,
-    output  reg[`RegAddrBus]    ex_wd_csr_reg
+    output  reg[`DataAddrBus]   ex_wd_csr_reg
 );
 
     always @ (posedge clk)  begin

@@ -94,10 +94,10 @@ module bitty_riscv(
     wire[`RegBus]           csr_reg_data_o;
     
     // id to csr
-    wire[`RegAddrBus]       id_csr_reg_addr_o;
+    wire[`DataAddrBus]      id_csr_reg_addr_o;
     // ex to csr 
     wire                    ex_wcsr_reg_o;
-    wire[`RegAddrBus]       ex_wd_csr_reg_o;
+    wire[`DataAddrBus]      ex_wd_csr_reg_o;
     wire[`RegBus]           ex_wcsr_data_o;
 
     // 连接 EX/MEM 模块的输出与访存阶段 MEM 模块的输入的变量

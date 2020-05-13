@@ -39,7 +39,7 @@ module ex(
     input   wire                wreg_i,
     input   wire                wcsr_reg_i,
     input   wire[`RegBus]       csr_reg_i,
-    input   wire[`RegAddrBus]   wd_csr_reg_i,
+    input   wire[`DataAddrBus]  wd_csr_reg_i,
 
     // 执行结果 to ex_mem
     output  reg[`RegAddrBus]    wd_o,
@@ -52,7 +52,7 @@ module ex(
 
     // output to csr_reg
     output  reg                 wcsr_reg_o,         // write csr enable
-    output  wire[`RegAddrBus]   wd_csr_reg_o,
+    output  wire[`DataAddrBus]  wd_csr_reg_o,
     output  reg[`RegBus]        wcsr_data_o,   
 
     // output  pc_reg / ctrl

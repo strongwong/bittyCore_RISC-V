@@ -31,11 +31,11 @@ module csr_reg(
 
     // write
     input   wire                we_i,
-    input   wire[`RegAddrBus]   waddr_i,
+    input   wire[`DataAddrBus]  waddr_i,
     input   wire[`RegBus]       wdata_i,
 
     // read
-    input   wire[`RegAddrBus]   raddr_i,
+    input   wire[`DataAddrBus]  raddr_i,
 
     output  reg[`RegBus]        rdata_o
 );

@@ -51,7 +51,7 @@ module ex(
     output  reg[`RegBus]        ex_reg2_o,
 
     // output to csr_reg
-    output  reg                 wcsr_reg_o,         // write csr enable
+    output  wire                wcsr_reg_o,         // write csr enable
     output  wire[`DataAddrBus]  wd_csr_reg_o,
     output  reg[`RegBus]        wcsr_data_o,   
 

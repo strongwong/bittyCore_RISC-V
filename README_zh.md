@@ -15,8 +15,8 @@ bittyCore 已完成模型联合仿真测试，并通过了 RISC-V 官方 RV32I I
 │  ├─core       # bittyCore verilog 源码
 │  └─sim        # 仿真顶层文件及目录
 ├─tests
-|  └─example
-|      └─simple # 简单测试工程代码
+│  └─example
+│      └─simple # 简单测试工程代码
 └─tools         # Windows 和 Linux 下的仿真脚本文件以及 filelist
 ```
 

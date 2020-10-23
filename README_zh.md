@@ -44,6 +44,11 @@ cd bittyCore_RISC-V
 .\tools\build.bat
 ```
 
+仿真完成后可以使用 gtkwave 查看仿真波形
+```cmd
+gtkwave .\rtl\sim\bitty_riscv_sopc_tb.vcd     % or gtkwave .\rtl\sim\bitty_riscv_sopc_tb.gtkw %
+```
+
 ## Linux
 
 ubuntu:
@@ -60,6 +65,12 @@ sudo apt install iverilog
 ```bash
 chmod +x ./tools/build.sh
 ./tools/build.sh
+```
+
+仿真完成后使用 gtkwave 查看波形
+```bash
+sudo apt install gtkwave
+gtkwave ./rtl/sim/bitty_riscv_sopc_tb.vcd     # or gtkwave ./rtl/sim/bitty_riscv_sopc_tb.gtkw
 ```
 
 # About

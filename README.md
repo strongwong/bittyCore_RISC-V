@@ -105,6 +105,10 @@ Run the simulation script
 .\tools\build.bat
 ```
 
+View the simulation waveform.
+```cmd
+gtkwave .\rtl\sim\bitty_riscv_sopc_tb.vcd     % or gtkwave .\rtl\sim\bitty_riscv_sopc_tb.gtkw %
+```
 
 # About
 

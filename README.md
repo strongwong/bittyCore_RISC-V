@@ -78,7 +78,7 @@ chmod +x ./tools/build.sh
 View the simulation waveform.
 ```bash
 sudo apt install gtkwave
-gtkwave ./rtl/sim/bitty_riscv_sopc_tb.vcd
+gtkwave ./rtl/sim/bitty_riscv_sopc_tb.vcd   # or gtkwave ./rtl/sim/bitty_riscv_sopc_tb.gtkw
 ```
 
 If you want to run new simulation:

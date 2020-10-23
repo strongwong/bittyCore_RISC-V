@@ -1,0 +1,115 @@
+[*]
+[*] GTKWave Analyzer v3.3.86 (w)1999-2017 BSI
+[*] Fri Oct 23 13:27:36 2020
+[*]
+[dumpfile] "/mnt/e/work/GitHub/bittyCore_RISC-V/rtl/sim/bitty_riscv_sopc_tb.vcd"
+[dumpfile_mtime] "Fri Oct 23 13:15:28 2020"
+[dumpfile_size] 1891004
+[savefile] "/mnt/e/work/GitHub/bittyCore_RISC-V/rtl/sim/bitty_riscv_sopc_tb.gtkw"
+[timestart] 184500
+[size] 1920 1017
+[pos] -113 -113
+*-15.093992 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] bitty_riscv_sopc_tb.
+[treeopen] bitty_riscv_sopc_tb.u_bitty_riscv_sopc.
+[treeopen] bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.
+[sst_width] 247
+[signals_width] 241
+[sst_expanded] 1
+[sst_vpaned_height] 402
+@800200
+-PC
+@28
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_pc_reg.rst
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_pc_reg.clk
+@22
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_pc_reg.pc_o[31:0]
+@1000200
+-PC
+@800200
+-if_id
+@22
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_if_id.pc_i[31:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_if_id.inst_i[31:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_if_id.pc_o[31:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_if_id.inst_o[31:0]
+@1000200
+-if_id
+@800200
+-id
+@22
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_id.pc_i[31:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_id.inst_i[31:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_id.pc_o[31:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_id.inst_o[31:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_id.aluop_o[4:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_id.alusel_o[3:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_id.opcode[6:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_id.rs1[4:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_id.rs2[4:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_id.rd[4:0]
+@1000200
+-id
+@800200
+-ex
+@22
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_ex.ex_pc[31:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_ex.ex_inst[31:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_ex.aluop_i[4:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_ex.alusel_i[3:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_ex.exe_res_sub[31:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_ex.arithres[31:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_ex.logicout[31:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_ex.shiftres[31:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_ex.compare[31:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_ex.branchres[31:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_ex.wd_o[4:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_ex.wdata_o[31:0]
+@28
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_ex.wreg_i
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_ex.wreg_o
+@1000200
+-ex
+@800200
+-mem
+@22
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_mem.mem_addr_o[31:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_mem.mem_aluop_i[4:0]
+@28
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_mem.mem_ce_o
+@22
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_mem.mem_data_i[31:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_mem.mem_data_o[31:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_mem.mem_mem_addr_i[31:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_mem.mem_reg2_i[31:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_mem.mem_sel_o[3:0]
+@28
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_mem.mem_we
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_mem.mem_we_o
+@22
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_mem.wd_i[4:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_mem.wd_o[4:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_mem.wdata_i[31:0]
+@23
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_mem.wdata_o[31:0]
+@28
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_mem.wreg_i
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_mem.wreg_o
+@1000200
+-mem
+@800200
+-mem_wb
+@22
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_mem_wb.mem_wd[4:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_mem_wb.mem_wdata[31:0]
+@28
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_mem_wb.mem_wreg
+@22
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_mem_wb.wb_wd[4:0]
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_mem_wb.wb_wdata[31:0]
+@28
+bitty_riscv_sopc_tb.u_bitty_riscv_sopc.u_bitty_riscv.u_mem_wb.wb_wreg
+@1000200
+-mem_wb
+[pattern_trace] 1
+[pattern_trace] 0

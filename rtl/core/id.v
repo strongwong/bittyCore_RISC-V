@@ -496,7 +496,7 @@ module id(
                         end
                     endcase
                 end
-                `INST_F_TYPE: begin
+                `INST_F_TYPE: begin             // fence
                     wreg_o      <= `WriteDisable;
                     wd_o        <= `NOPRegAddr;
                     reg1_addr_o <= `NOPRegAddr;

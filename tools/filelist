@@ -3,6 +3,7 @@
 ./rtl/sim/bitty_riscv_sopc_tb.v
 ./rtl/core/bitty_riscv_sopc.v
 ./rtl/core/bitty_riscv.v 
+./rtl/core/csr_reg.v
 ./rtl/core/ctrl.v
 ./rtl/core/data_ram.v
 ./rtl/core/ex.v
